@@ -23,7 +23,7 @@ public class MqController {
     private AmqpTemplate amqpTemplate;
 
     @GetMapping("/direct/send")
-    public Result send(Object msg){
+    public Object send(Object msg){
         System.out.println("send :" + msg);
         amqpTemplate.convertAndSend(EXNAME,null,msg);
         return Result.ok();

@@ -24,4 +24,9 @@ public class UserController {
         return userService.getUser(id);
     }
 
+    @GetMapping
+    ("/cacheAll/{tablename}")
+    public Result cacheAll(@PathVariable("tablename")String tableName){
+        return userService.cacheAll(tableName);
+    }
 }

@@ -18,4 +18,8 @@ public class UserService {
     public Result getUser(Long id) {
         return Result.ok(userMapper.findById(id));
     }
+
+    public Result cacheAll(String tableName) {
+        return Result.ok(userMapper.findAll(tableName));
+    }
 }

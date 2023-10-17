@@ -17,8 +17,9 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface IsInMysql {
-    String keyperfix(); // Redis缓存键名前缀
+
     long expireSeconds() default 60L; // 缓存过期时间，默认为60秒
+    String prefixKey(); // Redis缓存键名前缀
 
 
 }

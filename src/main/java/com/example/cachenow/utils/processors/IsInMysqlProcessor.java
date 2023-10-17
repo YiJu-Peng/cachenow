@@ -21,54 +21,7 @@ import java.util.concurrent.TimeUnit;
  * 作用是查看数据是否在缓存中,如果是的话就返回缓存,要不然就从数据库中读取
  * 然后再将查询好了的数据直接存入redis中
  */
-//@Slf4j
-//@Component
-//@Aspect
-//public class IsInMysqlProcessor{
-//    @Autowired
-//    private RedisTemplate<String, Object> redisTemplate;
-//
-//    @Around("@annotation(isInMysql)")
-//    public Object cacheAndExecute(ProceedingJoinPoint joinPoint, IsInMysql isInMysql) throws Throwable {
-//        log.error("now i am arrived");
-//        log.debug("cacheing");
-//        String redisKey ;
-//        String keyFormat = isInMysql.keyperfix();
-//        if (keyFormat.contains("%s")) {
-//            // 如果 keyFormat 中包含 %s 占位符，那么将其替换为参数
-//            String argsString = Arrays.toString(joinPoint.getArgs());
-//            String formattedKey = String.format(keyFormat, argsString.substring(1, argsString.length() - 1));
-//            redisKey = formattedKey;  // 更新 redisKey 的值
-//        } else {
-//            // 如果 keyFormat 不包含 %s 占位符，那么直接进行拼接
-//            StringBuilder sb = new StringBuilder();
-//            sb.append(keyFormat);
-//            final Object args = Arrays.asList(joinPoint.getArgs()).get(0);
-//            sb.append(".").append(args.toString());
-//            redisKey = sb.toString();  // 更新 redisKey 的值
-//        }
-//        long expireSeconds = isInMysql.expireSeconds();
-//        // 查询Redis缓存
-//        Object cachedResult = redisTemplate.opsForValue().get(redisKey);
-//        if (cachedResult != null) {
-//            MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
-//            Class<?> returnType = methodSignature.getMethod().getReturnType();
-//            ObjectMapper objectMapper = new ObjectMapper();
-//            log.error(returnType.toString());
-//            return objectMapper.readValue(cachedResult.toString(), returnType);
-//            //return JSON.parseObject(cachedResult, returnType);
-//        }
-//
-//        // 执行方法并缓存结果
-//        Object result = joinPoint.proceed();
-//        if (result != null) {
-//            log.debug("成功查询并缓存");
-//            redisTemplate.opsForValue().set(redisKey, result, expireSeconds, TimeUnit.SECONDS);
-//        }
-//        log.debug("现在是返回sql查询的数据");
-//            return result;
-//    }
-//}
+
 @Slf4j
 @Component
 @Aspect
@@ -79,7 +32,16 @@ public class IsInMysqlProcessor{
     @Around("@annotation(isInMysql)")
     public Object cacheAndExecute(ProceedingJoinPoint joinPoint, IsInMysql isInMysql) throws Throwable {
         log.debug("cacheing");
-        String redisKey = String.format(isInMysql.keyperfix(), Arrays.toString(joinPoint.getArgs()));
+
+        String arg = Arrays.toString(joinPoint.getArgs());
+        String keyPrefix = isInMysql.prefixKey();
+        String redisKey;
+
+        if (keyPrefix.contains("%s")) {
+            redisKey = String.format(keyPrefix, arg);
+        } else {
+            redisKey = keyPrefix +":"+ arg;
+        }
         long expireSeconds = isInMysql.expireSeconds();
 
         // 查询Redis缓存
