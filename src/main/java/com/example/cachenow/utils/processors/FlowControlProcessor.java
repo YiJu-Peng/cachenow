@@ -12,6 +12,8 @@ import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
+
 /**
  * 时间  17/10/2023 下午 11:03
  * 作者 Ctrlcv工程师  在线面对百度编程
@@ -33,7 +35,8 @@ public class FlowControlProcessor {
         if (process) {
             return joinPoint.proceed();
         }
-        return Result.fail("服务器过于繁忙");
+        //如果没有拿到令牌的话就返回空值
+        return null;
 
 
     }

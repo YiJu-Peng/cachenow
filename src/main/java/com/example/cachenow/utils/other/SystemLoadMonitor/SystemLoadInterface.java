@@ -5,7 +5,7 @@ package com.example.cachenow.utils.other.SystemLoadMonitor;
  * 作者 Ctrlcv工程师  在线面对百度编程
  */
 public interface SystemLoadInterface {
-    double THRESHOLD = 80.0;  // 定义设定的阀值
+    double THRESHOLD = 80.0;  // 定义设定的阀值,这个地方是说的是百分数
 
     boolean isOverLoad();
 }

@@ -14,6 +14,7 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 时间  14/10/2023 下午 2:03
@@ -32,11 +33,17 @@ public class BatchQueryProcessor {
     public Object cacheAndExecute(ProceedingJoinPoint joinPoint, BatchQuery batchQuery) throws Throwable {
         final Object arg = joinPoint.getArgs()[0];
         final String keyperfix = arg.toString();
-        final List<Object> proceed =  (List<Object>)joinPoint.proceed();
+
+        final Object object = joinPoint.proceed();
+        //如果没有拿到令牌的话就放回给service空值
+        if(object==null ){
+            return null;
+        }
+        List<Object> proceed =  (List<Object>)object;
 
         //获得对象的类型
-         Object object= proceed.get(0);
-        final Class<?> aClass = object.getClass();
+         Object target= proceed.get(0);
+        final Class<?> aClass = target.getClass();
 
         for (Object o : proceed) {
             //使用反射来获取主键(注意这个地方的id是泛指主键,主键可以在注解使用的时候设定,默认为id)
@@ -44,7 +51,7 @@ public class BatchQueryProcessor {
             field.setAccessible(true);
             final Object id = field.get(o);
             final String redisKey = keyperfix+":"+id;
-            redisTemplate.opsForValue().set(redisKey, o);
+            redisTemplate.opsForValue().set(redisKey, o,batchQuery.expireSeconds(), TimeUnit.SECONDS);
         }
         return proceed;
     }

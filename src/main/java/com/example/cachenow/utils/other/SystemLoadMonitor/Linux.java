@@ -4,20 +4,23 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 /**
- * 时间  18/10/2023 下午 4:55
+ * 时间  18/10/2023 下午 4:57
  * 作者 Ctrlcv工程师  在线面对百度编程
  */
 @Slf4j
-public class Win implements SystemLoadInterface{
+public class Linux implements SystemLoadInterface{
+
     @Override
     public boolean isOverLoad() {
-        String[] command = new String[] { "wmic", "cpu", "get", "loadpercentage" };
+        String []command = new String[] { "sh", "-c", "top -b -n1 | grep \"Cpu(s)\" | awk '{print $2}'" };
         try {
             ProcessBuilder processBuilder = new ProcessBuilder(command);
             Process process = processBuilder.start();

@@ -1,9 +1,12 @@
 package com.example.cachenow.service;
 
+import com.example.cachenow.domain.User;
 import com.example.cachenow.dto.Result;
 import com.example.cachenow.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 时间  9/10/2023 下午 3:25
@@ -20,6 +23,13 @@ public class UserService {
     }
 
     public Result cacheAll(String tableName) {
-        return Result.ok(userMapper.findAll(tableName));
+        final List<User> all = userMapper.findAll(tableName);
+        if (all!=null) {
+            return Result.ok(all);
+        }else {
+            return Result.fail("服务器繁忙请稍后再试");
+        }
+
+
     }
 }

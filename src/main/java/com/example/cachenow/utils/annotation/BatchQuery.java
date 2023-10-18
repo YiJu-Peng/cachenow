@@ -17,7 +17,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BatchQuery {
-    long expireSeconds() default 60L; // 缓存过期时间，默认为60秒
+    long expireSeconds() default 1L; // 缓存过期时间，默认为60秒
     String primaryKey() default "id";//主键名
 
 
