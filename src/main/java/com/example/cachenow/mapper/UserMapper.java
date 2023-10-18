@@ -3,6 +3,7 @@ package com.example.cachenow.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.cachenow.domain.User;
 import com.example.cachenow.utils.annotation.BatchQuery;
+import com.example.cachenow.utils.annotation.FlowControl;
 import com.example.cachenow.utils.annotation.IsInMysql;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -17,10 +18,12 @@ import java.util.List;
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
 
+    @FlowControl
     @IsInMysql(prefixKey = "user_%s", expireSeconds = 3600L)
     @Select("select * from cloud_user.users where id = #{id}")
     User findById(Long id);
 
+    @FlowControl
     @BatchQuery(expireSeconds = 3600L)
     @Select("select * from cloud_user.users ")
     List<User> findAll(String tableName);
