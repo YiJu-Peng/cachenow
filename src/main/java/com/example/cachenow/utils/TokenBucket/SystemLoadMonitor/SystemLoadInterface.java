@@ -1,4 +1,4 @@
-package com.example.cachenow.utils.other.SystemLoadMonitor;
+package com.example.cachenow.utils.TokenBucket.SystemLoadMonitor;
 
 import static com.example.cachenow.utils.Constants.TokenBucketConstants.SYSTEM_THRESHOLD;
 

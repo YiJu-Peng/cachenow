@@ -5,6 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import static com.example.cachenow.utils.Constants.RedisConstants.EXPIRE_SECONDS_ISINMYSQL;
+
 /**
  * 时间  8/10/2023 下午 9:16
  * 作者 Ctrlcv工程师  在线面对百度编程
@@ -18,7 +20,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface IsInMysql {
 
-    long expireSeconds() default 60L; // 缓存过期时间，默认为60秒
+    long expireSeconds() default EXPIRE_SECONDS_ISINMYSQL; // 缓存过期时间，默认为60秒
     String prefixKey(); // Redis缓存键名前缀
 
 

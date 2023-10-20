@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @MapperScan("com.example.cachenow.mapper")
 @SpringBootApplication
 public class CachenowApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(CachenowApplication.class, args);
     }

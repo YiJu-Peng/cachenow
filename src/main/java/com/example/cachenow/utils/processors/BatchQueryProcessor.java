@@ -14,6 +14,7 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -51,7 +52,9 @@ public class BatchQueryProcessor {
             field.setAccessible(true);
             final Object id = field.get(o);
             final String redisKey = keyperfix+":"+id;
-            redisTemplate.opsForValue().set(redisKey, o,batchQuery.expireSeconds(), TimeUnit.SECONDS);
+            //存储的时间错开,给一个随机值,防止缓存雪崩
+            final long expireSeconds = batchQuery.expireSeconds()+new Random().nextInt(10);
+            redisTemplate.opsForValue().set(redisKey, o,expireSeconds, TimeUnit.SECONDS);
         }
         return proceed;
     }

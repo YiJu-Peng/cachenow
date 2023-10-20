@@ -1,4 +1,4 @@
-package com.example.cachenow.utils.other.SystemLoadMonitor;
+package com.example.cachenow.utils.TokenBucket.SystemLoadMonitor;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,7 +1,7 @@
-package com.example.cachenow.utils.other;
-import com.example.cachenow.utils.other.SystemLoadMonitor.Linux;
-import com.example.cachenow.utils.other.SystemLoadMonitor.SystemLoadInterface;
-import com.example.cachenow.utils.other.SystemLoadMonitor.Win;
+package com.example.cachenow.utils.TokenBucket;
+import com.example.cachenow.utils.TokenBucket.SystemLoadMonitor.Linux;
+import com.example.cachenow.utils.TokenBucket.SystemLoadMonitor.SystemLoadInterface;
+import com.example.cachenow.utils.TokenBucket.SystemLoadMonitor.Win;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

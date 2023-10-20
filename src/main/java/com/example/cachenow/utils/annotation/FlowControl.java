@@ -1,16 +1,9 @@
 package com.example.cachenow.utils.annotation;
 
-import com.example.cachenow.utils.interception.TokenBucketInterception;
-import com.example.cachenow.utils.other.TokenBucket;
-import org.aopalliance.intercept.Interceptor;
-import org.springframework.web.servlet.HandlerInterceptor;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import static com.example.cachenow.utils.Constants.TokenBucketConstants.SYSTEM_THRESHOLD;
 
 /**
  * 时间  17/10/2023 上午 8:28

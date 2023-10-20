@@ -1,7 +1,6 @@
-package com.example.cachenow.utils.other;
+package com.example.cachenow.utils.TokenBucket;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 时间  17/10/2023 下午 11:22

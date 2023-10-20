@@ -1,8 +1,6 @@
 package com.example.cachenow.utils.interception;
 
-import com.example.cachenow.utils.other.TokenBucket;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.plugin.Intercepts;
+import com.example.cachenow.utils.TokenBucket.TokenBucket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;

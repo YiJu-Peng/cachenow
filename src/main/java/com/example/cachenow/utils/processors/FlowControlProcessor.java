@@ -1,18 +1,12 @@
 package com.example.cachenow.utils.processors;
 
-import com.example.cachenow.dto.Result;
 import com.example.cachenow.utils.annotation.FlowControl;
-import com.example.cachenow.utils.interception.TokenBucketInterception;
-import com.example.cachenow.utils.other.TokenConsumer;
+import com.example.cachenow.utils.TokenBucket.TokenConsumer;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.checkerframework.checker.units.qual.A;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.Collections;
 
 /**
  * 时间  17/10/2023 下午 11:03
