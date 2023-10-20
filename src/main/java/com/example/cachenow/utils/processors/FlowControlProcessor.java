@@ -32,10 +32,10 @@ public class FlowControlProcessor {
     public Object flowControl(ProceedingJoinPoint joinPoint, FlowControl flowControl) throws Throwable {
         // 调用获得令牌的方法
         final boolean process = tokenConsumer.process();
-        if (process) {//是非获得令牌
+        if (process) {//是否获得令牌
             return joinPoint.proceed();
         }
-        //如果没有拿到令牌的话就返回空值
+        //如果没有拿到令牌的话就返回空值(这个概率其实很小很小,除非是系统资源非常紧张的时候,或者说是阀值设置很低)
         log.info(Thread.currentThread().getName()+"线程没有拿到令牌");
         return null;
 

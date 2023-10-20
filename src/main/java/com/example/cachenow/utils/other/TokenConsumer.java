@@ -17,7 +17,6 @@ public class TokenConsumer {
     public  boolean process(){
         //判断是否拿到令牌,如果拿到令牌了的话就通行,要不然就返回错误代码
         if (!tokenBucket.getToken()) {
-            // 没有，需要拦截，设置状态码
             log.error("token bucket is empty");
             // 拦截
             return false;
