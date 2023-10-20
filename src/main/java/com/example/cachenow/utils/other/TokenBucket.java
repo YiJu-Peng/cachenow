@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.concurrent.*;
 
+import static com.example.cachenow.utils.Constants.TokenBucketConstants.*;
+
 /**
  * 时间  17/10/2023 上午 9:28
  * 作者 Ctrlcv工程师  在线面对百度编程
@@ -17,10 +19,11 @@ import java.util.concurrent.*;
 @Component
 @Slf4j
 public class TokenBucket {
-    private int capacity=2000;  // 令牌桶容量
-    private int rate=500;      // 令牌生成速率(计算方法为 每1000/rate ms生成一个)
-    private final int maxrate=2000;  // 最大令牌生成速率(计算方法为 每1000/rate ms生成一个)
-    private final int minrate=200; //   最小令牌牌生成速率(计算方法为 每500/rate ms生成一个)
+    private int capacity=CAPACITY;  // 令牌桶容量
+    private int rate=RATE;      // 令牌生成速率(计算方法为 每1000/rate ms生成一个)
+    private final int maxrate=MAX_RATE;  // 最大令牌生成速率(计算方法为 每1000/rate ms生成一个)
+    private final int minrate=MIN_RATE; //   最小令牌牌生成速率(计算方法为 每500/rate ms生成一个)
+    private final int adjustcycle=ADJUST_CYCLE; // 调整速率的周期
     private static BlockingQueue<Object> tokens;           // 令牌队列;
     private static SystemLoadInterface systemLoadMonitor;  // cpu占用率接口
     private static boolean IS_AUTO_RATE = true;  //是否开启自动调节rate(关闭了可能需要自己调试适配自己硬件的rate)
@@ -94,7 +97,6 @@ public class TokenBucket {
                     log.info("cpu利用率过高，令牌生成速率调整为：" + rate);
                 } else {
                     if (rate<maxrate) {
-
                         rate = (int) (rate / 0.8); // 当 CPU 利用率低于或等于阈值时，恢复令牌生成速率
                         log.info("cpu占用用率正常，令牌生成速率调整为：" + rate);
                     }
@@ -103,6 +105,6 @@ public class TokenBucket {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }, 0, 3, TimeUnit.SECONDS);
+        }, 0, adjustcycle, TimeUnit.SECONDS);//这个地方的四个参数是执行第一次任务等待的时间,第个次是周期
     }
 }

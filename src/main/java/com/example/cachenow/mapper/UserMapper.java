@@ -20,11 +20,12 @@ public interface UserMapper extends BaseMapper<User> {
 
     @FlowControl
     @IsInMysql(prefixKey = "user_%s", expireSeconds = 3600L)
+    @BatchQuery(expireSeconds = 3600L)
     @Select("select * from cloud_user.users where id = #{id}")
     User findById(Long id);
 
     @FlowControl
-    @BatchQuery(expireSeconds = 3600L)
+    @BatchQuery()
     @Select("select * from cloud_user.users ")
     List<User> findAll(String tableName);
 

@@ -30,12 +30,13 @@ public class FlowControlProcessor {
     }
     @Around("@annotation(flowControl)")
     public Object flowControl(ProceedingJoinPoint joinPoint, FlowControl flowControl) throws Throwable {
-        // 调用TokenBucketInterception注解处理器的方法
+        // 调用获得令牌的方法
         final boolean process = tokenConsumer.process();
-        if (process) {
+        if (process) {//是非获得令牌
             return joinPoint.proceed();
         }
         //如果没有拿到令牌的话就返回空值
+        log.info(Thread.currentThread().getName()+"线程没有拿到令牌");
         return null;
 
 

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 时间  10/10/2023 上午 9:36
  * 作者 Ctrlcv工程师  在线面对百度编程
+ * 这个是一个示例内容,实际就是将自己的接口上面使用我创建的注解
  */
 @RestController
 @RequestMapping("/user")

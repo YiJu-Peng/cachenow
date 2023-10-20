@@ -10,6 +10,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import static com.example.cachenow.utils.Constants.TokenBucketConstants.SYSTEM_THRESHOLD;
+
 /**
  * 时间  17/10/2023 上午 8:28
  * 作者 Ctrlcv工程师  在线面对百度编程
@@ -18,5 +20,4 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FlowControl {
-    //可以选择自己实现的控制流量的策略,我们这个地方使用的是自己实现的一个
 }
