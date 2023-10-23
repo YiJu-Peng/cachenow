@@ -27,6 +27,7 @@ public class UserService {
         if (all!=null) {
             return Result.ok(all);
         }else {
+            //这个只有在开启了flowcontrol才有可能到的地方
             return Result.fail("服务器繁忙请稍后再试");
         }
 

@@ -9,9 +9,11 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class TokenConsumer {
-    TokenBucket tokenBucket;
+    private static TokenBucket tokenBucket=null;
     public TokenConsumer(){
-        tokenBucket = new TokenBucket();
+        if (tokenBucket==null){
+            tokenBucket = new TokenBucket();
+        }
     }
     public  boolean process(){
         //判断是否拿到令牌,如果拿到令牌了的话就通行,要不然就返回错误代码

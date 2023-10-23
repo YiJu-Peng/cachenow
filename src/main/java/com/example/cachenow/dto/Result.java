@@ -9,6 +9,7 @@ import java.util.List;
 /**
  * 时间  10/10/2023 上午 9:52
  * 作者 Ctrlcv工程师  在线面对百度编程
+ * 后端返回值(返回给前端的)
  */
 @Data
 @NoArgsConstructor

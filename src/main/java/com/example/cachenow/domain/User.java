@@ -9,6 +9,7 @@ import java.io.Serializable;
 /**
  * 时间  10/10/2023 上午 9:22
  * 作者 Ctrlcv工程师  在线面对百度编程
+ * 测试用类
  */
 @Data
 @TableName("users")

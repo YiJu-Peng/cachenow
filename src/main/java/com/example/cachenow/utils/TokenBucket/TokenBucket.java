@@ -16,7 +16,6 @@ import static com.example.cachenow.utils.Constants.TokenBucketConstants.*;
  * 此算法给出的默认值会自动的根据系统的负载状况进行调整
  * 最好是开始前测试下最小和最大的rate值,适配自己的硬件环境
  */
-@Component
 @Slf4j
 public class TokenBucket {
     private int capacity=CAPACITY;  // 令牌桶容量

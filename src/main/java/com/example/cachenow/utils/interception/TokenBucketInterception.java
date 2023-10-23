@@ -1,10 +1,12 @@
 package com.example.cachenow.utils.interception;
 
 import com.example.cachenow.utils.TokenBucket.TokenBucket;
+import com.example.cachenow.utils.TokenBucket.TokenConsumer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,15 +17,16 @@ import javax.servlet.http.HttpServletResponse;
  * 可以将下面的拦截器放入拦截器链里面
  */
 @Component
+
 public class TokenBucketInterception implements HandlerInterceptor {
-
-
-    @Autowired
-    TokenBucket  tokenBucket ;
+    TokenConsumer tokenConsumer ;
+    public TokenBucketInterception(){
+        this.tokenConsumer=new TokenConsumer();
+    }
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //判断是否拿到令牌,如果拿到令牌了的话就通行,要不然就返回错误代码
-        if (!tokenBucket.getToken()) {
+        if (tokenConsumer.process()) {
             // 没有，需要拦截，设置状态码
             response.setStatus(401);
             // 拦截

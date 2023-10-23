@@ -37,6 +37,8 @@ public class BatchQueryProcessor {
 
         final Object object = joinPoint.proceed();
         //如果没有拿到令牌的话就放回给service空值
+        //这个是开启了限流才会有的情况
+        //如果正常的情况下是不会返回空值的
         if(object==null ){
             return null;
         }

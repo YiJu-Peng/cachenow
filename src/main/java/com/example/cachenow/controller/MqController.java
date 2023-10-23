@@ -28,6 +28,7 @@ public class MqController {
         amqpTemplate.convertAndSend(EXNAME,null,msg);
         return Result.ok();
     }
+    
 
     @RabbitListener(queues = QUEUENAME)
     public void processA(String msg) {
