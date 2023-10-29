@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.example.cachenow.utils.Constants.TokenBucketConstants.*;
 
@@ -15,6 +16,7 @@ import static com.example.cachenow.utils.Constants.TokenBucketConstants.*;
  * 令牌桶算法控制流量
  * 此算法给出的默认值会自动的根据系统的负载状况进行调整
  * 最好是开始前测试下最小和最大的rate值,适配自己的硬件环境
+ * 这个类只能被TokenConsumer类进行消费,如果像要定义别的消费模式推荐再创建一个消费者(TokenConsumer)
  */
 @Slf4j
 public class TokenBucket {
@@ -26,10 +28,15 @@ public class TokenBucket {
     private static BlockingQueue<Object> tokens;           // 令牌队列;
     private static SystemLoadInterface systemLoadMonitor;  // cpu占用率接口
     private static boolean IS_AUTO_RATE = true;  //是否开启自动调节rate(关闭了可能需要自己调试适配自己硬件的rate)
+    //生成令牌的线程池,不能让同一个木桶同时有多个的生成器
+    ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
 
 
     public TokenBucket(int capacity, int rate) {
+        //允许自定义一个木桶,但是要注意,整个系统中如果没有使用这个构造函数的话是只有一个木桶的
+        //也就是bean的单例模式里面的木桶,但是一旦使用这个创建了类的话,系统中就有两个木桶了
+        //创建的话请慎重考虑是否需要两个木桶,及机器的各种可能出现的情况
         this.capacity = capacity;
         this.rate = rate;
         tokens = new LinkedBlockingQueue<>(capacity);
@@ -64,7 +71,7 @@ public class TokenBucket {
             log.info("调用win系统");
             systemLoadMonitor = new Win();
         }else if(osName.contains("linux")){
-            log.info("调用centos系统");
+            log.info("调用linux系统");
             systemLoadMonitor = new Linux();
         }else {
             systemLoadMonitor = new Win(); //默认是win系统
@@ -78,8 +85,9 @@ public class TokenBucket {
         return tokens.poll() != null;
     }
 
+
     private void generateTokens() {
-        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+
         executorService.scheduleAtFixedRate(() -> {
             if (tokens.size() < capacity) {
                 tokens.add(new Object());// 生成新的令牌

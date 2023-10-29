@@ -38,16 +38,20 @@ public abstract class SystemLoadInterface {
             Pattern pattern = Pattern.compile("(\\d+)");
             Matcher matcher = pattern.matcher(output);
             if (matcher.find()) {
-                double cpuUsage = Double.parseDouble(matcher.group(1));
+                double cpuUsage = Double.parseDouble(matcher.group());
+                log.info("CPU usage: " + cpuUsage);
                 return cpuUsage > THRESHOLD;
             } else {
                 log.info("未成功读取到cpu负载,无法动态更新rate");
             }
             int exitCode = process.waitFor();  // 等待命令执行完成
             if (exitCode != 0) {
-                log.debug("负载查询命令关闭失败");
+                log.error("负载查询命令关闭失败");
             }
             inputStream.close();               // 关闭输入流
+            inputStreamReader.close(); //
+            reader.close();
+
             process.destroy();
         } catch (IOException e) {
             e.printStackTrace();
