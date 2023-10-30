@@ -16,6 +16,12 @@ spring:
         min-idle: 1
         time-between-eviction-runs: 10s
 
+  elasticsearch:
+    rest:
+      uris: 192.168.253.132:9200
+
+
+
 
   application:
     name: cacheservice # user???????\
