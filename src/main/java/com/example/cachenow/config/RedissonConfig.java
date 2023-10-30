@@ -7,11 +7,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericToStringSerializer;
 
 /**
  * 时间  10/10/2023 下午 6:37
  * 作者 Ctrlcv工程师  在线面对百度编程
+ * redis的基本配置类
  */
 @Configuration
 public class RedissonConfig {

@@ -1,12 +1,9 @@
 package com.example.cachenow.utils.interception;
 
-import com.example.cachenow.utils.TokenBucket.TokenBucket;
+
 import com.example.cachenow.utils.TokenBucket.TokenConsumer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
