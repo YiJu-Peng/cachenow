@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @since 2023-10-31
  */
 @Controller
-@RequestMapping("/user")
-public class UserController {
+@RequestMapping("/file")
+public class FileController {
 
 }
 

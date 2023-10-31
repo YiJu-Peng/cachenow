@@ -1,7 +1,6 @@
 package com.example.cachenow.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.cachenow.domain.User;
 import com.example.cachenow.utils.annotation.BatchQuery;
 import com.example.cachenow.utils.annotation.FlowControl;
 import com.example.cachenow.utils.annotation.IsInMysql;
