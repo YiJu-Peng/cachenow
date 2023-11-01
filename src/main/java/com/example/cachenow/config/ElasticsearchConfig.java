@@ -19,7 +19,7 @@ import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
  */
 @Configuration
 public class ElasticsearchConfig {
-    @Value("${spring.elasticsearch.rest.uris}")
+    @Value("${spring.data.elasticsearch.client.reactive.endpoints}")
     private String elasticsearchUri;
 
     // 用于与 Elasticsearch 进行交互。

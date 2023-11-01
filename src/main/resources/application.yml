@@ -2,6 +2,11 @@ server:
   port: 8081
 
 spring:
+  data:
+    elasticsearch:
+      client:
+        reactive:
+          endpoints: 192.168.253.132:9200
   datasource:
     url: jdbc:mysql://192.168.253.132:3306/cloud_user?usesSSL=false
     username: root
@@ -18,9 +23,7 @@ spring:
         min-idle: 1
         time-between-eviction-runs: 10s
 
-  elasticsearch:
-    rest:
-      uris: 192.168.253.132:9200
+
 
   application:
     name: cacheservice
