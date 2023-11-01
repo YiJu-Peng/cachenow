@@ -40,19 +40,4 @@ spring:
 mybatis-plus:
   type-aliases-package: com.example.cachenow.domain
 
-# 配置IK分词器
-analyzer:
-  class: org.wltea.analyzer.lucene.IKAnalyzer
 
-# 配置分词器工厂
-analyzerFactory:
-  class: org.springframework.beans.factory.config.MethodInvokingFactoryBean
-  properties:
-    targetObject: "@analyzer"
-    targetMethod: "getTokenizer"
-
-# 配置自定义的分词器
-customTokenizer:
-  class: com.example.CustomTokenizer
-  properties:
-    analyzerFactory: "@analyzerFactory"
