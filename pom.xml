@@ -144,7 +144,9 @@
             <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
         </dependency>
 
-<!--        <dependency>-->
+
+
+        <!--        <dependency>-->
 <!--            <groupId>org.elasticsearch</groupId>-->
 <!--            <artifactId>elasticsearch</artifactId>-->
 <!--            <version>7.15.0</version>-->
@@ -164,20 +166,6 @@
 <!--            <version>7.3.0</version>-->
 <!--        </dependency>-->
 
-        <!-- JUnit 5 -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.7.2</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.7.2</version>
-            <scope>test</scope>
-        </dependency>
 
     </dependencies>
     <repositories>

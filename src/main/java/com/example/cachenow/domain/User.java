@@ -32,7 +32,15 @@ public class User implements Serializable {
     private String icon;
 
     private String email;
+    private String phone;
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public Integer getUser_id() {
         return user_id;
