@@ -3,6 +3,7 @@ package com.example.cachenow.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.cachenow.domain.Resource;
+import org.springframework.stereotype.Repository;
 
 /**
  * <p>
@@ -11,7 +12,7 @@ import com.example.cachenow.domain.Resource;
  *
  * @author Ctrlcv工程师
  * @since 2023-10-31
- */
+ */@Repository
 public interface ResourceDao extends BaseMapper<Resource> {
 
 }

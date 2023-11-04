@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 
+ *  这张表里面是有粉丝数,关注人的数量的,方便后续调整
  * </p>
  *
  * @author Ctrlcv工程师
@@ -22,46 +22,57 @@ public class UserInfo implements Serializable {
      */
     @TableId(value = "user_id", type = IdType.AUTO)
     private Long user_id;
+
     /**
      * 城市名称
      */
     private String city;
+
     /**
      * 个人介绍，不要超过128个字符
      */
     private String introduce;
+
     /**
      * 粉丝数量
      */
     private Integer fans;
+
     /**
      * 关注的人的数量
      */
     private Integer followee;
+
     /**
      * 性别，0：男，1：女
      */
     private Boolean gender;
+
     /**
      * 生日
      */
     private LocalDate birthday;
+
     /**
      * 积分
      */
     private Integer credits;
+
     /**
      * 会员级别，0~9级,0代表未开通会员
      */
     private Boolean level;
+
     /**
      * 创建时间
      */
     private LocalDateTime create_time;
+
     /**
      * 更新时间
      */
     private LocalDateTime update_time;
+
 
 
     public Long getUser_id() {

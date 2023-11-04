@@ -25,8 +25,6 @@ public class User implements Serializable {
 
     private String password;
 
-    private String contact;
-
     private LocalDateTime created_at;
 
     private String icon;
@@ -66,22 +64,6 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public String getContact() {
-        return contact;
-    }
-
-    public void setContact(String contact) {
-        this.contact = contact;
-    }
-
-    public LocalDateTime getCreated_at() {
-        return created_at;
-    }
-
-    public void setCreated_at(LocalDateTime created_at) {
-        this.created_at = created_at;
-    }
-
     public String getIcon() {
         return icon;
     }
@@ -104,10 +86,13 @@ public class User implements Serializable {
         "user_id=" + user_id +
         ", username=" + username +
         ", password=" + password +
-        ", contact=" + contact +
         ", created_at=" + created_at +
         ", icon=" + icon +
         ", email=" + email +
         "}";
+    }
+
+    public void setCreated_at(LocalDateTime created_at) {
+        this.created_at = created_at;
     }
 }

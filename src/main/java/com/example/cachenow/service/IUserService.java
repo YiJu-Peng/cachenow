@@ -2,11 +2,13 @@ package com.example.cachenow.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.cachenow.domain.Resource;
 import com.example.cachenow.domain.User;
 import com.example.cachenow.dto.LoginFormDTO;
 import com.example.cachenow.dto.Result;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * <p>
@@ -25,5 +27,14 @@ public interface IUserService extends IService<User> {
     Result sign();
 
     Result signCount();
+
+    Result register(LoginFormDTO loginForm, HttpSession session);
+
+    Result userProfile();
+
+    List<Resource> userHistory();
+    List<Resource> userHistory(Long pageNumber);
+    List<Resource> userHistoryClean();
+
 
 }

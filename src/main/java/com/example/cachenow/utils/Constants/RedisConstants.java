@@ -16,6 +16,9 @@ public class RedisConstants {
     public static final Long LOGIN_USER_TTL = 36000L;
     public static final String USER_SIGN_KEY = "sign:";
 
+    public static final String USER_HISTORY_KEY= "user:history:";//确定用户翻到哪页缓存前缀
+    public static final Long USER_HISTROY_TTL = 3600L;//查询的历史记录的最后一条数据id 的保留时间
+
 
 
 

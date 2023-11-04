@@ -51,6 +51,15 @@ public class UserController {
         // 实现登录功能
         return userService.login(loginForm, session);
     }
+    /**
+     * 注册功能
+     * @param loginForm 登录参数，包含手机号、验证码；或者手机号、密码
+     */
+    @PostMapping("/register")
+    public Result register(@RequestBody LoginFormDTO loginForm, HttpSession session){
+        // 实现登录功能
+        return userService.register(loginForm, session);
+    }
 
     /**
      * 登出功能
@@ -60,9 +69,13 @@ public class UserController {
     public Result logout(){
         // TODO 实现登出功能
         UserHolder.removeUser();
-        return Result.fail("功能未完成");
+        return Result.ok();
     }
 
+    /**
+     * 返回自己的信息獲得
+     * @return UserDTO
+     */
     @GetMapping("/me")
     public Result me(){
         // 获取当前登录的用户并返回
@@ -96,14 +109,47 @@ public class UserController {
         return Result.ok(userDTO);
     }
 
+    /**
+     * 签到接口
+     * @return 无
+     */
     @PostMapping("/sign")
     public Result sign(){
         return userService.sign();
     }
 
+    /**
+     * 签到的总天数
+     * @return 返回签到的总天数
+     */
     @GetMapping("/sign/count")
     public Result signCount(){
         return userService.signCount();
+    }
+
+    /**
+     * 返回用户的额外信息 城市,个人介绍,性别,关注的人的数量,生日,积分,会员级别,创建时间,更新时间
+     * @return UserInfo
+     */
+    @GetMapping("/sign/profile")
+    public Result userProfile(){
+        return userService.userProfile();
+    }
+
+
+    @GetMapping("/history")
+    public Result userHistory(){
+        return Result.ok(userService.userHistory());
+    }
+
+    @GetMapping("/history/clean")
+    public Result userHistoryClean(){
+        return Result.ok(userService.userHistoryClean());
+    }
+
+    @GetMapping("/history/{pageNumber}")
+    public Result userHistoryClean(@PathVariable("pageNumber") Long pageNumber){
+        return Result.ok(userService.userHistory(pageNumber));
     }
 
 }

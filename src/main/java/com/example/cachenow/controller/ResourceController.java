@@ -1,7 +1,13 @@
 package com.example.cachenow.controller;
 
 
+import com.example.cachenow.domain.Resource;
+import com.example.cachenow.dto.Result;
+import com.example.cachenow.service.impl.ResourceServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -15,6 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/resource")
 public class ResourceController {
-
+    @Autowired
+    ResourceServiceImpl resourceService;
+    @PostMapping("/create")
+    public Result creat(){
+        return Result.ok(resourceService.creatResoure());
+    }
 }
 

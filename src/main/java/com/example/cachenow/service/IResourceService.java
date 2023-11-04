@@ -14,4 +14,5 @@ import com.example.cachenow.domain.Resource;
  */
 public interface IResourceService extends IService<Resource> {
 
+    Object creatResoure();
 }

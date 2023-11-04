@@ -4,16 +4,21 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.RandomUtil;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.cachenow.domain.History;
 import com.example.cachenow.domain.User;
+import com.example.cachenow.domain.UserInfo;
 import com.example.cachenow.dto.LoginFormDTO;
 import com.example.cachenow.dto.Result;
 import com.example.cachenow.dto.UserDTO;
 import com.example.cachenow.mapper.UserDao;
 import com.example.cachenow.service.IUserService;
+import com.example.cachenow.utils.other.RedisUtil;
 import com.example.cachenow.utils.other.RegexUtils;
 import com.example.cachenow.utils.other.UserHolder;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.BitFieldSubCommands;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -22,6 +27,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +35,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.example.cachenow.utils.Constants.RedisConstants.*;
 import static com.example.cachenow.utils.Constants.SystemConstants.USER_NICK_NAME_PREFIX;
+import static com.example.cachenow.utils.Constants.UserConstants.USER_HISTORY_PAGE_SIZE;
 
 /**
  * <p>
@@ -45,6 +52,12 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements IUser
 
     @Resource
     private StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    private UserInfoServiceImpl userInfoService;
+    @Autowired
+    private HistoryServiceImpl historyService;
+    @Autowired
+    private ResourceServiceImpl resourceService;
 
     @Override
     public Result sendCode(String phone, HttpSession session) {
@@ -54,12 +67,14 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements IUser
             return Result.fail("手机号格式错误！");
         }
         // 3.符合，生成验证码
+        //todo: 这个地方要使用外部的sdk获取验证码,还未完成
         String code = RandomUtil.randomNumbers(6);
 
         // 4.保存验证码到 session
         stringRedisTemplate.opsForValue().set(LOGIN_CODE_KEY + phone, code, LOGIN_CODE_TTL, TimeUnit.MINUTES);
 
         // 5.发送验证码
+        //todo: 这个地方我们还需要发送到手机上,现在只是简单的打印下
         log.debug("发送短信验证码成功，验证码：{}", code);
         // 返回ok
         return Result.ok();
@@ -73,6 +88,48 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements IUser
             // 2.如果不符合，返回错误信息
             return Result.fail("手机号格式错误！");
         }
+
+        // 4.一致，根据手机号查询用户 select * from tb_user where phone = ?
+        User user = query().eq("phone", phone).one();
+
+        if(user.getPassword().equals(loginForm.getPassword())
+                &&user.getPhone().equals(loginForm.getPhone())){
+            // 7.保存用户信息到 redis中
+            // 7.1.随机生成token，作为登录令牌
+            String token = UUID.randomUUID().toString(true);
+            // 7.2.将User对象转为HashMap存储
+            UserDTO userDTO = BeanUtil.copyProperties(user, UserDTO.class);
+            Map<String, Object> userMap = BeanUtil.beanToMap(userDTO, new HashMap<>(),
+                    CopyOptions.create()
+                            .setIgnoreNullValue(true)
+                            .setFieldValueEditor((fieldName, fieldValue) -> fieldValue.toString()));
+            // 7.3.存储
+            String tokenKey = LOGIN_USER_KEY + token;
+            stringRedisTemplate.opsForHash().putAll(tokenKey, userMap);
+            // 7.4.设置token有效期
+            stringRedisTemplate.expire(tokenKey, LOGIN_USER_TTL, TimeUnit.MINUTES);
+
+            // 8.返回token
+            return Result.ok(token);
+
+        }
+        else {
+            return Result.fail("对不起您的用户不存在");
+        }
+
+    }
+
+    public  Result register(LoginFormDTO loginForm, HttpSession session){
+
+        // 1.校验手机号
+        String phone = loginForm.getPhone();
+        if (RegexUtils.isPhoneInvalid(phone)) {
+            // 2.如果不符合，返回错误信息
+            return Result.fail("手机号格式错误！");
+        }
+
+
+
         // 3.从redis获取验证码并校验
         String cacheCode = stringRedisTemplate.opsForValue().get(LOGIN_CODE_KEY + phone);
         String code = loginForm.getCode();
@@ -107,8 +164,82 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements IUser
 
         // 8.返回token
         return Result.ok(token);
+
     }
 
+    @Override
+    public Result userProfile() {
+        Long id = UserHolder.getUser().getId();
+        final UserInfo byId = userInfoService.getById(id);
+        return Result.ok(byId);
+    }
+
+    /**
+     * 获取历史数据
+     * 使用不断下拉的方式获取
+     * @return list of resources
+     */
+    @Override
+    public List<com.example.cachenow.domain.Resource> userHistory() {
+        final Long id = UserHolder.getUser().getId();
+        final Object o = RedisUtil.get(USER_HISTORY_KEY + id);
+        long pageNo =0L;
+        if (o.toString()!=null){
+            pageNo = Long.parseLong(o.toString());
+            RedisUtil.set(USER_HISTORY_KEY + id,pageNo+1,USER_HISTROY_TTL);
+        }
+        final Page<History> userHistory = historyService.
+                getUserHistory(id, pageNo, USER_HISTORY_PAGE_SIZE);
+
+        List<com.example.cachenow.domain.Resource> resources = new ArrayList<> ();
+        for (History history : userHistory.getRecords()) {
+            // 处理每条历史记录的逻辑
+            resources.add(resourceService.getById(history.getResource_id()));
+        }
+        return resources;
+    }
+
+    /**
+     * 获取指定的页数
+     * @param pageNumber
+     * @return list of resources
+     */
+    @Override
+    public List<com.example.cachenow.domain.Resource> userHistory(Long pageNumber) {
+        final Long id = UserHolder.getUser().getId();
+        final Page<History> userHistory =
+                historyService.getUserHistory(id, pageNumber, USER_HISTORY_PAGE_SIZE);
+        List<com.example.cachenow.domain.Resource> resources = new ArrayList<> ();
+        for (History history : userHistory.getRecords()) {
+            // 处理每条历史记录的逻辑
+            resources.add(resourceService.getById(history.getResource_id()));
+        }
+        return resources;
+    }
+
+    /**
+     * 重置下拉的页数并获取第一页
+     *
+     * @return 历史记录
+     */
+    @Override
+    public List<com.example.cachenow.domain.Resource> userHistoryClean() {
+        final Long id = UserHolder.getUser().getId();
+        RedisUtil.set(USER_HISTORY_KEY + id,0,USER_HISTROY_TTL);
+        final Page<History> userHistory = historyService.
+                getUserHistory(id, 0L, USER_HISTORY_PAGE_SIZE);
+        List<com.example.cachenow.domain.Resource> resources = new ArrayList<> ();
+        for (History history : userHistory.getRecords()) {
+            // 处理每条历史记录的逻辑
+            resources.add(resourceService.getById(history.getResource_id()));
+        }
+        return resources;
+    }
+
+    /**
+     * 用户签到的接口
+     * @return 无返回
+     */
     @Override
     public Result sign() {
         // 1.获取当前登录用户
@@ -125,6 +256,10 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements IUser
         return Result.ok();
     }
 
+    /**
+     * 用户统计签到的功能
+     * @return 签到的天数
+     */
     @Override
     public Result signCount() {
         // 1.获取当前登录用户
@@ -166,6 +301,8 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements IUser
         }
         return Result.ok(count);
     }
+
+
 
     private User createUserWithPhone(String phone) {
         // 1.创建用户
