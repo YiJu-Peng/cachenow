@@ -101,11 +101,11 @@ public class TokenBucket {
                 if (systemLoadMonitor.isOverLoad()&&rate > minrate) {
 
                     rate = (int) (rate * 0.8); // 当 CPU 利用率高于阈值时，降低令牌生成速率
-                    log.info("cpu利用率过高，令牌生成速率调整为：" + rate);
+                    log.debug("cpu利用率过高，令牌生成速率调整为：" + rate);
                 } else {
                     if (rate<maxrate) {
                         rate = (int) (rate / 0.8); // 当 CPU 利用率低于或等于阈值时，恢复令牌生成速率
-                        log.info("cpu占用用率正常，令牌生成速率调整为：" + rate);
+                        log.debug("cpu占用用率正常，令牌生成速率调整为：" + rate);
                     }
 
                 }

@@ -4,6 +4,8 @@ package com.example.cachenow.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.cachenow.domain.Resource;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -14,5 +16,12 @@ import com.example.cachenow.domain.Resource;
  */
 public interface IResourceService extends IService<Resource> {
 
-    Object creatResoure();
+
+    List<Resource> getResourcesByCategory(Integer categoryId);
+
+    String getCategoryById(Integer categoryId);
+
+    void addResource(Resource resource);
+
+    List<Resource> getResourcesByTitle(String resourceTitle);
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * <p>
@@ -57,7 +58,7 @@ public class UserController {
      */
     @PostMapping("/register")
     public Result register(@RequestBody LoginFormDTO loginForm, HttpSession session){
-        // 实现登录功能
+        // 实现注册功能
         return userService.register(loginForm, session);
     }
 
@@ -139,17 +140,24 @@ public class UserController {
 
     @GetMapping("/history")
     public Result userHistory(){
-        return Result.ok(userService.userHistory());
+        final List<com.example.cachenow.domain.Resource> resources = userService.userHistory();
+        final int size = resources.size();
+        return Result.ok(resources, (long) size);
     }
 
     @GetMapping("/history/clean")
     public Result userHistoryClean(){
-        return Result.ok(userService.userHistoryClean());
+        final List<com.example.cachenow.domain.Resource> resources = userService.userHistory();
+        final int size = resources.size();
+        return Result.ok(resources, (long) size);
     }
 
     @GetMapping("/history/{pageNumber}")
     public Result userHistoryClean(@PathVariable("pageNumber") Long pageNumber){
-        return Result.ok(userService.userHistory(pageNumber));
+
+        final List<com.example.cachenow.domain.Resource> resources = userService.userHistory(pageNumber);
+        final int size = resources.size();
+        return Result.ok(resources, (long) size);
     }
 
 }

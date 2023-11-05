@@ -34,6 +34,6 @@ public class MqController {
     public void processA(String msg) {
         System.out.println("Receiver A:" + msg);
     }
-    //我想要实现一个冒泡
+
 
 }

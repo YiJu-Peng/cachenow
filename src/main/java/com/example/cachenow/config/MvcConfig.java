@@ -23,13 +23,14 @@ public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 登录拦截器
-        registry.addInterceptor(new LoginInterceptor())
-                .excludePathPatterns(
-//                        "/blog/hot",
-
-                        //TODO: 需要用户登录的页面进行拦截
-                ).order(1);
+//        registry.addInterceptor(new LoginInterceptor())
+//                .excludePathPatterns(
+////                        "/blog/hot",
+//
+//                        //TODO: 需要用户登录的页面进行拦截
+//                ).order(1);
         // token刷新的拦截器
-        registry.addInterceptor(new RefreshTokenInterceptor(stringRedisTemplate)).addPathPatterns("/**").order(0);
+        // TODO: 实现token刷新功能 现在测试的时候就不用了,到时候上线了之后再使用
+        //registry.addInterceptor(new RefreshTokenInterceptor(stringRedisTemplate)).addPathPatterns("/**").order(0);
     }
 }

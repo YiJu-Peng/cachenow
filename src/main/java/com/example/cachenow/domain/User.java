@@ -2,7 +2,11 @@ package com.example.cachenow.domain;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.data.elasticsearch.annotations.Document;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -14,10 +18,13 @@ import java.time.LocalDateTime;
  * @author Ctrlcv工程师
  * @since 2023-10-31
  */
+@Document(indexName = "user_index")
+@Entity
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Id
     @TableId(value = "user_id", type = IdType.ASSIGN_ID)
     private Integer user_id;
 

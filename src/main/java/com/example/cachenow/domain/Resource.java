@@ -2,7 +2,13 @@ package com.example.cachenow.domain;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.example.cachenow.dto.ResourceDTO;
+import lombok.Data;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -14,10 +20,13 @@ import java.time.LocalDateTime;
  * @author Ctrlcv工程师
  * @since 2023-10-31
  */
+@Data
+@Entity
+@Document(indexName = "resource_index")
 public class Resource implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    @Id
     @TableId(value = "resource_id", type = IdType.ASSIGN_ID)
     private Integer resource_id;
 
@@ -25,80 +34,33 @@ public class Resource implements Serializable {
 
     private String content;
 
+    //这个是用来标识分类的
     private Integer category_id;
 
     private LocalDateTime created_at;
 
+    //上传者的id
     private Integer uploader_id;
 
-    private Float rating;
+    private Float rating;//记录的是整体的评分
 
-    private Integer total_ratings;
+    private Integer total_ratings;//记录的是评价的次数
 
-
-    public Integer getResource_id() {
-        return resource_id;
+    public Resource(ResourceDTO resourceDTO) {
+        this.title = resourceDTO.getTitle();
+        this.content = resourceDTO.getContent();
     }
 
-    public void setResource_id(Integer resource_id) {
-        this.resource_id = resource_id;
+    public Resource() {
+
     }
 
-    public String getTitle() {
-        return title;
+    public Resource(Long id, String name, String description) {
+        this.resource_id = id.intValue();
+        this.title = name;
+        this.content = description;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public Integer getCategory_id() {
-        return category_id;
-    }
-
-    public void setCategory_id(Integer category_id) {
-        this.category_id = category_id;
-    }
-
-    public LocalDateTime getCreated_at() {
-        return created_at;
-    }
-
-    public void setCreated_at(LocalDateTime created_at) {
-        this.created_at = created_at;
-    }
-
-    public Integer getUploader_id() {
-        return uploader_id;
-    }
-
-    public void setUploader_id(Integer uploader_id) {
-        this.uploader_id = uploader_id;
-    }
-
-    public Float getRating() {
-        return rating;
-    }
-
-    public void setRating(Float rating) {
-        this.rating = rating;
-    }
-
-    public Integer getTotal_ratings() {
-        return total_ratings;
-    }
-
-    public void setTotal_ratings(Integer total_ratings) {
-        this.total_ratings = total_ratings;
-    }
 
     @Override
     public String toString() {

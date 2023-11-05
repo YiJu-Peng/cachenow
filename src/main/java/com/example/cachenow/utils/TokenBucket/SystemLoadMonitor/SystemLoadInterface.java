@@ -39,10 +39,10 @@ public abstract class SystemLoadInterface {
             Matcher matcher = pattern.matcher(output);
             if (matcher.find()) {
                 double cpuUsage = Double.parseDouble(matcher.group());
-                log.info("CPU usage: " + cpuUsage);
+                log.debug("CPU usage: " + cpuUsage);
                 return cpuUsage > THRESHOLD;
             } else {
-                log.info("未成功读取到cpu负载,无法动态更新rate");
+                log.debug("未成功读取到cpu负载,无法动态更新rate");
             }
             int exitCode = process.waitFor();  // 等待命令执行完成
             if (exitCode != 0) {

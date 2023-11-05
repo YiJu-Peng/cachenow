@@ -12,10 +12,10 @@ import org.springframework.context.annotation.Configuration;
 public class MybatisPlusConfig {
 
     //实现创建数据到数据库的时候会自动的填充创建时间和更新时间
-    @Bean
-    public MyMetaObjectHandler metaObjectHandler() {
-        return new MyMetaObjectHandler();
-    }
+//    @Bean
+//    public MyMetaObjectHandler metaObjectHandler() {
+//        return new MyMetaObjectHandler();
+//    }
 
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {

@@ -3,6 +3,9 @@ package com.example.cachenow.domain;
 import com.baomidou.mybatisplus.annotation.IdType;
 import java.time.LocalDate;
 import com.baomidou.mybatisplus.annotation.TableId;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 import java.io.Serializable;
 
@@ -13,13 +16,14 @@ import java.io.Serializable;
  *
  * @author Ctrlcv工程师
  * @since 2023-11-02
- */
+ */@Entity
 public class UserInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
     /**
      * 主键，用户id
      */
+    @Id
     @TableId(value = "user_id", type = IdType.AUTO)
     private Long user_id;
 
