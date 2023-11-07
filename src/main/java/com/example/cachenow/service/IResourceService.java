@@ -3,6 +3,7 @@ package com.example.cachenow.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.cachenow.domain.Resource;
+import com.example.cachenow.dto.ResourceDTO;
 
 import java.util.List;
 
@@ -17,11 +18,19 @@ import java.util.List;
 public interface IResourceService extends IService<Resource> {
 
 
-    List<Resource> getResourcesByCategory(Integer categoryId);
+    List<ResourceDTO> ResourcesSearch(String search, int pageNum);
 
-    String getCategoryById(Integer categoryId);
+    List<Resource> getResourcesByCategory(Integer categoryId, int pageNumber);
 
     void addResource(Resource resource);
 
-    List<Resource> getResourcesByTitle(String resourceTitle);
+    List<Resource> getResourcesByUserId(Integer userId);
+
+    void editResource(Long resourceId, ResourceDTO request);
+
+    void rateResource(long resourceId, int rate);
+
+    void addComment(Long resourceId, String content);
+
+    void deleteResource(Integer resourceId);
 }

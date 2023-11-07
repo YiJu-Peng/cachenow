@@ -20,4 +20,6 @@ import java.util.List;
 public interface ResourceDao extends BaseMapper<Resource> {
      @Select("select * from cloud_user.Resource where title = #{title}")
      List<Resource> findByTitle(String title);
+     @Select("select * from cloud_user.Resource ")
+     List<Resource> findAll();
 }

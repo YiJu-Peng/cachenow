@@ -2,13 +2,15 @@ package com.example.cachenow.domain;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.example.cachenow.dto.ResourceDTO;
 import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -21,14 +23,15 @@ import java.time.LocalDateTime;
  * @since 2023-10-31
  */
 @Data
-@Entity
 @Document(indexName = "resource_index")
+@TableName("Resource")
 public class Resource implements Serializable {
+
 
     private static final long serialVersionUID = 1L;
     @Id
-    @TableId(value = "resource_id", type = IdType.ASSIGN_ID)
-    private Integer resource_id;
+    @TableId(value = "resource_id", type = IdType.AUTO)
+    private Long resource_id;
 
     private String title;
 
@@ -37,18 +40,29 @@ public class Resource implements Serializable {
     //这个是用来标识分类的
     private Integer category_id;
 
+    @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSSSS")
     private LocalDateTime created_at;
 
     //上传者的id
-    private Integer uploader_id;
+    private Long uploader_id;
 
     private Float rating;//记录的是整体的评分
 
     private Integer total_ratings;//记录的是评价的次数
 
+    public Long getId() {
+        return resource_id;
+    }
     public Resource(ResourceDTO resourceDTO) {
+        //这个后面还是改改吧这个id生成地策略不是很好
+        this.resource_id =System.currentTimeMillis();
         this.title = resourceDTO.getTitle();
         this.content = resourceDTO.getContent();
+        this.category_id = resourceDTO.getCategoryid();
+        this.created_at = LocalDateTime.now();
+        this.uploader_id=resourceDTO.getUserId();
+        this.rating = 0f;
+        this.total_ratings = 0;
     }
 
     public Resource() {
@@ -56,7 +70,7 @@ public class Resource implements Serializable {
     }
 
     public Resource(Long id, String name, String description) {
-        this.resource_id = id.intValue();
+        this.resource_id = id;
         this.title = name;
         this.content = description;
     }

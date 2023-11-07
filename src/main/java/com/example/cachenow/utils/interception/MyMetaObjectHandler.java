@@ -12,17 +12,16 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {
-        // 自动填充创建时间和修改时间
+        //如果属性有值则不覆盖,如果填充值为null则不填充.
         this.strictInsertFill(metaObject, "created_at", LocalDateTime.class, LocalDateTime.now());
         this.strictInsertFill(metaObject, "create_time", LocalDateTime.class, LocalDateTime.now());
-        this.strictUpdateFill(metaObject, "update_time", LocalDateTime.class, LocalDateTime.now());
-        this.strictUpdateFill(metaObject, "uploaded_at", LocalDateTime.class, LocalDateTime.now());
-
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        // 自动填充修改时间
+        //无论属性是否有值都填充
         this.strictUpdateFill(metaObject, "updateTime", Date.class, new Date());
+        this.strictUpdateFill(metaObject, "update_time", LocalDateTime.class, LocalDateTime.now());
+        this.strictUpdateFill(metaObject, "uploaded_at", LocalDateTime.class, LocalDateTime.now());
     }
 }

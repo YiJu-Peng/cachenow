@@ -39,6 +39,10 @@ public class ElasticsearchConfig {
         return new ElasticsearchRestTemplate(client);
     }
 
+//    @Bean
+//    public ElasticsearchRestTemplate elasticsearchRestTemplate(RestHighLevelClient client) {
+//        return new ElasticsearchRestTemplate(client);
+//    }
     //可以执行一些索引相关的操作，比如创建索引、删除索引、设置索引映射等。它提供了一组简化的方法，使得管理索引变得更加容易。
     @Bean
     public IndexOperations indexOperations(ElasticsearchOperations operations) {

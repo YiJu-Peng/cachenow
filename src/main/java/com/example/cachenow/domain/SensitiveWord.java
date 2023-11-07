@@ -2,9 +2,8 @@ package com.example.cachenow.domain;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.io.Serializable;
 
 /**
@@ -14,11 +13,11 @@ import java.io.Serializable;
  *
  * @author Ctrlcv工程师
  * @since 2023-10-31
- */@Entity
+ */@TableName("SensitiveWord")
 public class SensitiveWord implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
+
     @TableId(value = "word_id", type = IdType.ASSIGN_ID)
     private Integer word_id;
 

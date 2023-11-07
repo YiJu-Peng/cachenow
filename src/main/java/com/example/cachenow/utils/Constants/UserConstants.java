@@ -5,6 +5,6 @@ package com.example.cachenow.utils.Constants;
  * 作者 Ctrlcv工程师  在线面对百度编程
  */
 public class UserConstants {
-    public static final Long USER_HISTORY_PAGE_SIZE = 6L;//每次拉取都是拉取五条数据
+    public static final Long PAGE_SIZE = 6L;//每次拉取都是拉取六条数据
 
 }

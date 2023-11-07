@@ -35,7 +35,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.example.cachenow.utils.Constants.RedisConstants.*;
 import static com.example.cachenow.utils.Constants.SystemConstants.USER_NICK_NAME_PREFIX;
-import static com.example.cachenow.utils.Constants.UserConstants.USER_HISTORY_PAGE_SIZE;
+import static com.example.cachenow.utils.Constants.UserConstants.PAGE_SIZE;
 
 /**
  * <p>
@@ -189,7 +189,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements IUser
             RedisUtil.set(USER_HISTORY_KEY + id,pageNo+1,USER_HISTROY_TTL);
         }
         final Page<History> userHistory = historyService.
-                getUserHistory(id, pageNo, USER_HISTORY_PAGE_SIZE);
+                getUserHistory(id, pageNo, PAGE_SIZE);
 
         List<com.example.cachenow.domain.Resource> resources = new ArrayList<> ();
         for (History history : userHistory.getRecords()) {
@@ -208,7 +208,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements IUser
     public List<com.example.cachenow.domain.Resource> userHistory(Long pageNumber) {
         final Long id = UserHolder.getUser().getId();
         final Page<History> userHistory =
-                historyService.getUserHistory(id, pageNumber, USER_HISTORY_PAGE_SIZE);
+                historyService.getUserHistory(id, pageNumber, PAGE_SIZE);
         List<com.example.cachenow.domain.Resource> resources = new ArrayList<> ();
         for (History history : userHistory.getRecords()) {
             // 处理每条历史记录的逻辑
@@ -227,7 +227,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements IUser
         final Long id = UserHolder.getUser().getId();
         RedisUtil.set(USER_HISTORY_KEY + id,0,USER_HISTROY_TTL);
         final Page<History> userHistory = historyService.
-                getUserHistory(id, 0L, USER_HISTORY_PAGE_SIZE);
+                getUserHistory(id, 0L, PAGE_SIZE);
         List<com.example.cachenow.domain.Resource> resources = new ArrayList<> ();
         for (History history : userHistory.getRecords()) {
             // 处理每条历史记录的逻辑

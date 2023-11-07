@@ -1,10 +1,9 @@
 package com.example.cachenow.domain;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.*;
+import com.mysql.cj.protocol.x.FieldFactory;
+import org.springframework.data.elasticsearch.annotations.Field;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -15,12 +14,11 @@ import java.time.LocalDateTime;
  *
  * @author Ctrlcv工程师
  * @since 2023-10-31
- */@Entity
+ */@TableName("Comment")
 public class Comment implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @TableId(value = "comment_id", type = IdType.ASSIGN_ID)
+    @TableId(value = "comment_id", type = IdType.AUTO)
     private Integer comment_id;
 
     private Integer user_id;
@@ -28,7 +26,7 @@ public class Comment implements Serializable {
     private Integer resource_id;
 
     private String comment;
-
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime created_at;
 
 

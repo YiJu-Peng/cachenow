@@ -2,10 +2,10 @@ package com.example.cachenow.domain;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import org.springframework.data.elasticsearch.annotations.Document;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+
 import java.io.Serializable;
 
 /**
@@ -18,12 +18,12 @@ import java.io.Serializable;
  */
 
 @Document(indexName = "tag_index")
-@Entity
+@TableName("Tag")
 public class Tag implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
+
     @TableId(value = "tag_id", type = IdType.ASSIGN_ID)
     private Integer tag_id;
 

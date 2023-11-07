@@ -2,9 +2,8 @@ package com.example.cachenow.domain;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -15,11 +14,11 @@ import java.time.LocalDateTime;
  *
  * @author Ctrlcv工程师
  * @since 2023-10-31
- */@Entity
+ */@TableName("RatingDTO")
 public class Rating implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
+
     @TableId(value = "rating_id", type = IdType.ASSIGN_ID)
     private Integer rating_id;
 
@@ -74,7 +73,7 @@ public class Rating implements Serializable {
 
     @Override
     public String toString() {
-        return "Rating{" +
+        return "RatingDTO{" +
         "rating_id=" + rating_id +
         ", user_id=" + user_id +
         ", resource_id=" + resource_id +
