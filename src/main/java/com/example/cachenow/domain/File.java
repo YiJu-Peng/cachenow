@@ -3,6 +3,7 @@ package com.example.cachenow.domain;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
  * @author Ctrlcv工程师
  * @since 2023-10-31
  */@TableName("File")
+@Data
 public class File implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -29,6 +31,10 @@ public class File implements Serializable {
     private Integer uploader_id;
 
     private LocalDateTime uploaded_at;
+
+    private String content_type;
+
+    public File() {}
 
 
     public Integer getFile_id() {
