@@ -12,6 +12,7 @@ import com.example.cachenow.domain.Post;
  * @author Ctrlcv工程师
  * @since 2023-10-31
  */
+
 public interface IPostService extends IService<Post> {
 
 }

@@ -3,6 +3,7 @@ package com.example.cachenow.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.cachenow.domain.File;
+import com.example.cachenow.dto.Result;
 
 /**
  * <p>
