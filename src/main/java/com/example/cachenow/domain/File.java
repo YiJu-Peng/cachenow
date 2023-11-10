@@ -34,6 +34,8 @@ public class File implements Serializable {
 
     private String content_type;
 
+    private int is_pass;
+
     public File() {}
 
 
