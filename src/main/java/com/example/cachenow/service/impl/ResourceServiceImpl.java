@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.cachenow.domain.Comment;
 import com.example.cachenow.domain.Resource;
 import com.example.cachenow.dto.ResourceDTO;
-import com.example.cachenow.mapper.CategoryDao;
 import com.example.cachenow.mapper.ResourceDao;
 import com.example.cachenow.service.IResourceService;
 import com.example.cachenow.utils.other.UserHolder;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -79,12 +77,15 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceDao, Resource> impl
     }
 
     @Override
-    public void addComment(Long resourceId, String content) {
+    public void addComment(Long resourceId, String content, Long superId) {
         final Comment comment = new Comment();
         comment.setComment(content);
         comment.setResource_id(Math.toIntExact(resourceId));
         comment.setUser_id(Math.toIntExact(UserHolder.getUser().getId()));
         comment.setCreated_at(java.time.LocalDateTime.now());
+        if (superId != null) {
+            comment.setSuper_id(Math.toIntExact(superId));
+        }
         commentService.save(comment);
     }
 

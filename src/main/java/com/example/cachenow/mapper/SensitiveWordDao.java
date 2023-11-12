@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.cachenow.domain.SensitiveWord;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * <p>
  *  Mapper 接口
@@ -14,5 +16,7 @@ import org.springframework.stereotype.Repository;
  * @since 2023-10-31
  */@Repository
 public interface SensitiveWordDao extends BaseMapper<SensitiveWord> {
+
+
 
 }

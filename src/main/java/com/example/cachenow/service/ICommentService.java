@@ -4,6 +4,8 @@ package com.example.cachenow.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.cachenow.domain.Comment;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -13,5 +15,5 @@ import com.example.cachenow.domain.Comment;
  * @since 2023-10-31
  */
 public interface ICommentService extends IService<Comment> {
-
+    public List<Comment> getCommentsByResourceId(Integer resourceId);
 }

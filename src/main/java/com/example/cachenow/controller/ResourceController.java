@@ -8,6 +8,7 @@ import com.example.cachenow.dto.Result;
 import com.example.cachenow.dto.Search;
 import com.example.cachenow.es.esservice.ResourceService;
 import com.example.cachenow.service.impl.ResourceServiceImpl;
+import com.example.cachenow.utils.annotation.SensitiveWordFilter;
 import com.example.cachenow.utils.other.UserHolder;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -115,20 +116,13 @@ public class ResourceController {
         return Result.ok("资源评分成功");
     }
 
-    @PostMapping("/comment/{resourceId}")
-    public Result commentResource(
-            @PathVariable("resourceId") Long resourceId,
-            @RequestBody String content) {
-        if (resourceId==null){
-            return Result.fail("resourceId cannot be null");
-        }
-        if (content==null){
-            return Result.fail("content cannot be null");
-        }
-        resourceService.addComment(resourceId, content);
-        return Result.ok("评论成功");
-    }
 
+
+    /**
+     * 对指定id的资源进行删除
+     * @param resourceId 资源的id
+     * @return 返回是否删除成功
+     */
     @DeleteMapping("/delete/{resourceId}")
     public Result commentResource(@PathVariable Integer resourceId) {
         if (resourceId==null){

@@ -2,9 +2,12 @@ package com.example.cachenow.config;
 
 
 import com.rabbitmq.client.ConnectionFactory;
+import org.springframework.amqp.core.AmqpAdmin;
+import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +19,26 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class MqConfig {
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+    @Autowired
+    private AmqpAdmin amqpAdmin;
+
+    /**
+     * 这个方法传入指定的参数之后可以自动的创建队列
+     */
+    public void ensureQueueExists(String queueName, boolean durable, boolean exclusive, boolean autoDelete) {
+        Queue queue = new Queue(queueName, durable, exclusive, autoDelete);
+        amqpAdmin.declareQueue(queue);
+    }
+    /**
+     * 这个方法传入指定的参数之后可以自动的创建交换机
+     */
+    public void ensureExchangeExists(String exchangeName, boolean durable, boolean autoDelete) {
+        DirectExchange exchange = new DirectExchange(exchangeName, durable, autoDelete);
+        amqpAdmin.declareExchange(exchange);
+    }
     @Bean
     public Queue resourceQueue() {
         return new Queue("ResourceQueue", true, false, false);
@@ -31,22 +54,5 @@ public class MqConfig {
     }
 
 
-//    @Bean
-//    public ConnectionFactory connectionFactory() {
-//        ConnectionFactory connectionFactory = new ConnectionFactory();
-//        // 从 YAML 文件中读取 RabbitMQ 连接配置
-//        connectionFactory.setHost("192.168.253.132");
-//        connectionFactory.setPort(5672);
-//        connectionFactory.setUsername("root");
-//        connectionFactory.setPassword("asdf");
-//        connectionFactory.setVirtualHost("/");
-//        return connectionFactory;
-//    }
-//    @Bean
-//    public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory){
-//        RabbitAdmin rabbitAdmin = new RabbitAdmin((org.springframework.amqp.rabbit.connection.ConnectionFactory) connectionFactory);
-//        rabbitAdmin.setAutoStartup(true);
-//        return rabbitAdmin;
-//    }
 
 }

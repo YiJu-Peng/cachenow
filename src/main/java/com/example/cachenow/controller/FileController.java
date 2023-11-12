@@ -46,7 +46,7 @@ public class FileController {
      * @param id 传入的文件的id
      * @return 下载的文件
      */
-    @GetMapping("/review/{id}")
+    @GetMapping("/download/{id}")
     public MultipartFile getFileById(@PathVariable int id) {
         return fileService.getFileById(id);
     }

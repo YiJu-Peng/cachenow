@@ -30,7 +30,7 @@ public interface IResourceService extends IService<Resource> {
 
     void rateResource(long resourceId, int rate);
 
-    void addComment(Long resourceId, String content);
+    void addComment(Long resourceId, String content, Long superId);
 
     void deleteResource(Integer resourceId);
 }
