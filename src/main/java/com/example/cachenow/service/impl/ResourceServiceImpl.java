@@ -47,10 +47,11 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceDao, Resource> impl
     }
 
     @Override
-    public List<Resource> getResourcesByUserId(Integer userId) {
+    public List<ResourceDTO> getResourcesByUserId(Integer userId) {
         return resourceMapper.
                 selectList(new QueryWrapper<Resource>().
-                        eq("uploader_id", userId));
+                        eq("uploader_id", userId))
+                .stream().map(ResourceDTO::new).collect(Collectors.toList());
     }
 
     @Override
@@ -98,6 +99,16 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceDao, Resource> impl
         }
     }
 
+    @Override
+    public Resource getResourceById(Integer resourceId) {
+        final Resource resource = resourceMapper.selectById(resourceId);
+        if (resource != null) {
+            return resource;
+        }
+        System.out.println("未找到资源");
+        return null;
+    }
+
     /**
      * 进行模糊查询,最好使用es中的,这个是es启动失败备用的
      *
@@ -121,11 +132,12 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceDao, Resource> impl
     }
 
     // 按分类检索资源
-    public List<Resource> getResourcesByCategory(Integer categoryId, int pageNumber) {
+    public List<ResourceDTO> getResourcesByCategory(Integer categoryId, int pageNumber) {
         final Page<Resource> Page = new Page<>(pageNumber, PAGE_SIZE);
         return resourceMapper
                 .selectPage(Page, new QueryWrapper<Resource>()
-                .eq("category_id", categoryId)).getRecords();
+                .eq("category_id", categoryId)).getRecords()
+                .stream().map(ResourceDTO::new).collect(Collectors.toList());
     }
 
 

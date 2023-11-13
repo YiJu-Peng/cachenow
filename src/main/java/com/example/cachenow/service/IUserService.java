@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.cachenow.domain.Resource;
 import com.example.cachenow.domain.User;
 import com.example.cachenow.dto.LoginFormDTO;
+import com.example.cachenow.dto.ResourceDTO;
 import com.example.cachenow.dto.Result;
 
 import javax.servlet.http.HttpSession;
@@ -33,8 +34,8 @@ public interface IUserService extends IService<User> {
     Result userProfile();
 
     List<Resource> userHistory();
-    List<Resource> userHistory(Long pageNumber);
-    List<Resource> userHistoryClean();
+    List<ResourceDTO> userHistory(Long pageNumber);
+    List<ResourceDTO> userHistoryClean();
 
 
 }

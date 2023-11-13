@@ -5,6 +5,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.example.cachenow.domain.User;
 import com.example.cachenow.domain.UserInfo;
 import com.example.cachenow.dto.LoginFormDTO;
+import com.example.cachenow.dto.ResourceDTO;
 import com.example.cachenow.dto.Result;
 import com.example.cachenow.dto.UserDTO;
 import com.example.cachenow.service.IUserInfoService;
@@ -84,6 +85,11 @@ public class UserController {
         return Result.ok(user);
     }
 
+    /**
+     * 返回用户的详细信息 这个包括住址个人信息啥的
+     * @param userId 用户id
+     * @return UserInfo
+     */
     @GetMapping("/info/{id}")
     public Result info(@PathVariable("id") Long userId){
         // 查询详情
@@ -98,6 +104,11 @@ public class UserController {
         return Result.ok(info);
     }
 
+    /**
+     * 通过id来对用户进行查询
+     * @param userId 用户id
+     * @return 返回用户的基本信息
+     */
     @GetMapping("/{id}")
     public Result queryUserById(@PathVariable("id") Long userId){
         // 查询详情
@@ -152,10 +163,15 @@ public class UserController {
         return Result.ok(resources, (long) size);
     }
 
+    /**
+     * resource消息
+     * @param pageNumber 页数
+     * @return 返回的是简单的resource消息
+     */
     @GetMapping("/history/{pageNumber}")
     public Result userHistoryClean(@PathVariable("pageNumber") Long pageNumber){
 
-        final List<com.example.cachenow.domain.Resource> resources = userService.userHistory(pageNumber);
+        final List<ResourceDTO> resources = userService.userHistory(pageNumber);
         final int size = resources.size();
         return Result.ok(resources, (long) size);
     }

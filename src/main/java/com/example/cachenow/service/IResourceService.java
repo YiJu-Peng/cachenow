@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.cachenow.domain.Resource;
 import com.example.cachenow.dto.ResourceDTO;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -17,14 +18,14 @@ import java.util.List;
  */
 public interface IResourceService extends IService<Resource> {
 
-
     List<ResourceDTO> ResourcesSearch(String search, int pageNum);
 
-    List<Resource> getResourcesByCategory(Integer categoryId, int pageNumber);
+    List<ResourceDTO> getResourcesByCategory(Integer categoryId, int pageNumber);
 
     void addResource(Resource resource);
 
-    List<Resource> getResourcesByUserId(Integer userId);
+    List<ResourceDTO> getResourcesByUserId(Integer userId);
+
 
     void editResource(Long resourceId, ResourceDTO request);
 
@@ -33,4 +34,6 @@ public interface IResourceService extends IService<Resource> {
     void addComment(Long resourceId, String content, Long superId);
 
     void deleteResource(Integer resourceId);
+
+    Resource getResourceById(Integer resourceId);
 }

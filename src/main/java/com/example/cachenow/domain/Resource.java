@@ -50,12 +50,12 @@ public class Resource implements Serializable {
 
     private Integer total_ratings;//记录的是评价的次数
 
+    private Integer click_count;//记录被点击量
+
     public Long getId() {
         return resource_id;
     }
     public Resource(ResourceDTO resourceDTO) {
-        //这个后面还是改改吧这个id生成地策略不是很好
-        this.resource_id =System.currentTimeMillis();
         this.title = resourceDTO.getTitle();
         this.content = resourceDTO.getContent();
         this.category_id = resourceDTO.getCategoryid();

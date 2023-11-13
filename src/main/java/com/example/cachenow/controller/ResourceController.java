@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -36,10 +37,11 @@ public class ResourceController {
     @Autowired
     ResourceService resourceESService;
     @Autowired
-    RabbitTemplate  rabbitTemplate;
+    RabbitTemplate rabbitTemplate;
 
     /**
      * 添加资源,并同步到es中
+     *
      * @param resourceDTO 请求上传的资源
      * @return 无
      */
@@ -54,6 +56,7 @@ public class ResourceController {
 
     /**
      * 查询框使用的模糊查询,可以查询所有的有关的资料,es中没有地话就会进入mysql查(mysql查地很简单就是前后加%)
+     *
      * @param search 要查的关键字,可以是标题和内容
      * @return 返回匹配资源列表
      */
@@ -68,32 +71,35 @@ public class ResourceController {
 
     /**
      * 按分类检索资源
+     *
      * @param search 分类进行检索的分类id
-     * @return 返回符合分类的资源
+     * @return 返回符合分类的资源 这个返回的只有简单的信息
      */
     @PostMapping("/category/")
     public Result getResourcesByCategory(@RequestBody Search search) {
-        final List<Resource> resourcesByCategory = resourceService.
-                getResourcesByCategory((Integer) search.getSearch(),search.getPageNumber());
+        final List<ResourceDTO> resourcesByCategory = resourceService.
+                getResourcesByCategory((Integer) search.getSearch(), search.getPageNumber());
         final Long size = (long) resourcesByCategory.size();
         return Result.ok(resourcesByCategory, size);
     }
 
     /**
      * 通过userid获取个人资源
+     *
      * @param userId 个人id
      * @return 返回个人发布的资源
      */
     @GetMapping("/{userId}")
     public Result getCategoryById(@PathVariable Integer userId) {
-        final List<Resource> resourcesByUserId = resourceService.getResourcesByUserId(userId);
+        final List<ResourceDTO> resourcesByUserId = resourceService.getResourcesByUserId(userId);
         return Result.ok(resourcesByUserId, (long) resourcesByUserId.size());
     }
 
     /**
      * 编辑个人资源
+     *
      * @param resourceId 资源的id
-     * @param request 请求进行更改的资源
+     * @param request    请求进行更改的资源
      * @return 无
      */
     @PostMapping("/edit/{resourceId}")
@@ -106,6 +112,7 @@ public class ResourceController {
 
     /**
      * 用户进行评分的接口
+     *
      * @param rating 打的分数和id
      * @return 无
      */
@@ -117,19 +124,30 @@ public class ResourceController {
     }
 
 
-
     /**
      * 对指定id的资源进行删除
+     *
      * @param resourceId 资源的id
      * @return 返回是否删除成功
      */
     @DeleteMapping("/delete/{resourceId}")
     public Result commentResource(@PathVariable Integer resourceId) {
-        if (resourceId==null){
+        if (resourceId == null) {
             return Result.fail("resourceId cannot be null");
         }
         resourceService.deleteResource(resourceId);
         return Result.ok("资源删除成功");
+    }
+
+    /**
+     * 根据id进行一个resource的查询
+     * @param resourceId id
+     * @return 返回resource的具体内容
+     */
+    @GetMapping("/get/{resourceId}")
+    public Result getResourceById(@PathVariable Integer resourceId) {
+        Resource resource = resourceService.getResourceById(resourceId);
+        return Result.ok(resource);
     }
 }
 
