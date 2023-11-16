@@ -50,7 +50,7 @@ public class Resource implements Serializable {
 
     private Integer total_ratings;//记录的是评价的次数
 
-    private Integer click_count;//记录被点击量
+    //private Integer click_count;//记录被点击量
 
     public Long getId() {
         return resource_id;

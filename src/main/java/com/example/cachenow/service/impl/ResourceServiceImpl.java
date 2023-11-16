@@ -103,6 +103,9 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceDao, Resource> impl
     public Resource getResourceById(Integer resourceId) {
         final Resource resource = resourceMapper.selectById(resourceId);
         if (resource != null) {
+            //我们要让这个被点击一次
+            //resource.setClick_count(resource.getClick_count()+1);
+            //resourceMapper.updateById(resource);
             return resource;
         }
         System.out.println("未找到资源");
