@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 
@@ -24,7 +25,7 @@ import java.time.LocalDateTime;
  * @author Ctrlcv工程师
  * @since 2023-10-31
  */
-@Controller
+@RestController
 @RequestMapping("/chatMessage")
 public class ChatMessageController {
     private final ChatMessageServiceImpl chatMessageService;

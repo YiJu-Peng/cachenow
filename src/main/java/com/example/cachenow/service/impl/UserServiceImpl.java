@@ -15,6 +15,7 @@ import com.example.cachenow.dto.Result;
 import com.example.cachenow.dto.UserDTO;
 import com.example.cachenow.mapper.UserDao;
 import com.example.cachenow.service.IUserService;
+import com.example.cachenow.utils.other.MailUtils;
 import com.example.cachenow.utils.other.RedisUtil;
 import com.example.cachenow.utils.other.RegexUtils;
 import com.example.cachenow.utils.other.UserHolder;
@@ -62,9 +63,9 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements IUser
     private ResourceServiceImpl resourceService;
 
     @Override
-    public Result sendCode(String phone, HttpSession session) {
+    public Result sendCode(String mail) {
         // 1.校验手机号
-        if (RegexUtils.isPhoneInvalid(phone)) {
+        if (RegexUtils.isEmailInvalid(mail)) {
             // 2.如果不符合，返回错误信息
             return Result.fail("手机号格式错误！");
         }
@@ -72,14 +73,20 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements IUser
         //todo: 这个地方要使用外部的sdk获取验证码,还未完成
         String code = RandomUtil.randomNumbers(6);
 
-        // 4.保存验证码到 session
-        stringRedisTemplate.opsForValue().set(LOGIN_CODE_KEY + phone, code, LOGIN_CODE_TTL, TimeUnit.MINUTES);
+
+        // 4.保存验证码到 redis
+        stringRedisTemplate.opsForValue().set(LOGIN_CODE_KEY + mail, code, LOGIN_CODE_TTL, TimeUnit.MINUTES);
 
         // 5.发送验证码
         //todo: 这个地方我们还需要发送到手机上,现在只是简单的打印下
-        log.debug("发送短信验证码成功，验证码：{}", code);
+        log.debug("发送邮件验证码成功，验证码：{}", code);
+        try {
+            MailUtils.sendMail(mail, Integer.parseInt(code));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         // 返回ok
-        return Result.ok();
+        return Result.ok(code);
     }
 
     @Override

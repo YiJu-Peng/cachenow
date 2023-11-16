@@ -4,13 +4,11 @@ package com.example.cachenow.controller;
 import cn.hutool.core.bean.BeanUtil;
 import com.example.cachenow.domain.User;
 import com.example.cachenow.domain.UserInfo;
-import com.example.cachenow.dto.LoginFormDTO;
-import com.example.cachenow.dto.ResourceDTO;
-import com.example.cachenow.dto.Result;
-import com.example.cachenow.dto.UserDTO;
+import com.example.cachenow.dto.*;
 import com.example.cachenow.service.IUserInfoService;
 import com.example.cachenow.service.IUserService;
 import com.example.cachenow.utils.other.UserHolder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,24 +24,25 @@ import java.util.List;
  * @author Ctrlcv工程师
  * @since 2023-10-31
  */
-@Controller
 @RequestMapping("/user")
+@RestController
 public class UserController {
-    @Resource
+    @Autowired
     private IUserService userService;
 
-    @Resource
+    @Autowired
     private IUserInfoService userInfoService;
 
     /**
-     * 发送手机验证码
+     * 发送邮箱验证码
+     * @param mail 邮箱
      */
-    @PostMapping("code")
-    public Result sendCode(@RequestParam("phone") String phone, HttpSession session) {
+    @PostMapping("/code")
+    public Result sendCode(@RequestBody Mail mail) {
         // 发送短信验证码并保存验证码
-        return userService.sendCode(phone, session);
+        final String mail1 = mail.getMail();
+        return userService.sendCode(mail1);
     }
-
     /**
      * 登录功能
      * @param loginForm 登录参数，包含手机号、验证码；或者手机号、密码

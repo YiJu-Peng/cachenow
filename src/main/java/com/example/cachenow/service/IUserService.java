@@ -21,7 +21,7 @@ import java.util.List;
  */
 public interface IUserService extends IService<User> {
 
-    Result sendCode(String phone, HttpSession session);
+    Result sendCode(String mail);
 
     Result login(LoginFormDTO loginForm, HttpSession session);
 

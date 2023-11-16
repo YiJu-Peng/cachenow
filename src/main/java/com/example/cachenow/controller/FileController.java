@@ -21,7 +21,7 @@ import java.util.List;
  * @author Ctrlcv工程师
  * @since 2023-10-31
  */
-@Controller
+@RestController
 @RequestMapping("/file")
 public class FileController {
 

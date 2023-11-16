@@ -20,7 +20,7 @@ import java.util.List;
  * @author Ctrlcv工程师
  * @since 2023-10-31
  */
-@Controller
+@RestController
 @RequestMapping("/comment")
 public class CommentController {
     @Autowired
@@ -32,7 +32,7 @@ public class CommentController {
      * @param resourceId 资源的id
      * @return 返回所有的评论
      */
-    @GetMapping("/{resourceId}")
+    @GetMapping("/resource/{resourceId}")
     public List<Comment> getCommentsByResourceId(@PathVariable Integer resourceId) {
         return commentService.getCommentsByResourceId(resourceId);
     }

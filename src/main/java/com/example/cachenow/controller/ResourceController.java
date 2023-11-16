@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
  * @since 2023-10-31
  */
 @ResponseBody
-@Controller
+@RestController
 @RequestMapping("/resource")
 public class ResourceController {
     @Autowired
