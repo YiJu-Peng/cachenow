@@ -25,6 +25,7 @@ import static com.example.cachenow.utils.Constants.UserConstants.PAGE_SIZE;
 
 @Service
 public class ResourceService {
+
     @Autowired
     private ResourceRepository resourceRepository;
 

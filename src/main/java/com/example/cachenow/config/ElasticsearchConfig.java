@@ -3,6 +3,8 @@ package com.example.cachenow.config;
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +21,7 @@ import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
  */
 @Configuration
 public class ElasticsearchConfig {
-    @Value("${spring.data.elasticsearch.client.reactive.endpoints}")
+    @Value("${spring.elasticsearch.rest.uris}")
     private String elasticsearchUri;
 
     // 用于与 Elasticsearch 进行交互。
@@ -38,11 +40,12 @@ public class ElasticsearchConfig {
     public ElasticsearchOperations elasticsearchTemplate(RestHighLevelClient client) {
         return new ElasticsearchRestTemplate(client);
     }
-
+//    @Autowired
 //    @Bean
 //    public ElasticsearchRestTemplate elasticsearchRestTemplate(RestHighLevelClient client) {
 //        return new ElasticsearchRestTemplate(client);
 //    }
+
     //可以执行一些索引相关的操作，比如创建索引、删除索引、设置索引映射等。它提供了一组简化的方法，使得管理索引变得更加容易。
     @Bean
     public IndexOperations indexOperations(ElasticsearchOperations operations) {
