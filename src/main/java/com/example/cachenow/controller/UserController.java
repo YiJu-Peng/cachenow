@@ -8,10 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.cachenow.common.ErrorCode;
 import com.example.cachenow.domain.User;
 import com.example.cachenow.domain.UserInfo;
-import com.example.cachenow.dto.LoginFormDTO;
-import com.example.cachenow.dto.Result;
-import com.example.cachenow.dto.UserDTO;
-import com.example.cachenow.dto.UserQueryRequest;
+import com.example.cachenow.dto.*;
 import com.example.cachenow.expetion.BizException;
 import com.example.cachenow.service.IUserInfoService;
 import com.example.cachenow.service.IUserService;
@@ -44,9 +41,9 @@ public class UserController {
      * 发送手机验证码
      */
     @PostMapping("code")
-    public Result sendCode(@RequestParam("phone") String phone, HttpSession session) {
+    public Result sendCode(@RequestParam("mail") String mail, HttpSession session) {
         // 发送短信验证码并保存验证码
-        return userService.sendCode(phone, session);
+        return userService.sendCode(mail);
     }
 
     /**
@@ -170,7 +167,7 @@ public class UserController {
     @GetMapping("/history/{pageNumber}")
     public Result userHistoryClean(@PathVariable("pageNumber") Long pageNumber) {
 
-        final List<com.example.cachenow.domain.Resource> resources = userService.userHistory(pageNumber);
+        final List<ResourceDTO> resources = userService.userHistory(pageNumber);
         final int size = resources.size();
         return Result.ok(resources, (long) size);
     }
