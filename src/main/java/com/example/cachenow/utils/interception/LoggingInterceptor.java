@@ -17,8 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.UUID;
 
 /**
- * 简单日志记录
- * AOP 实现
+ * 简单日志记录 AOP
  *
  * @Author: Ifela
  * @Date: 2023/11/7 19:48:13

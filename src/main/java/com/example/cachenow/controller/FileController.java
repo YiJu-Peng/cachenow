@@ -5,9 +5,9 @@ import cn.hutool.core.io.FileUtil;
 import com.aliyun.oss.model.OSSObject;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.example.cachenow.common.ErrorCode;
-import com.example.cachenow.enums.FileUploadEnum;
 import com.example.cachenow.dto.Result;
 import com.example.cachenow.dto.UserDTO;
+import com.example.cachenow.enums.FileUploadEnum;
 import com.example.cachenow.expetion.BizException;
 import com.example.cachenow.service.IFileService;
 import com.example.cachenow.utils.oss.OSSManger;
@@ -40,7 +40,7 @@ public class FileController {
     @Autowired
     private IFileService fileService;
 
-    @GetMapping("download/{fileId}")
+    @GetMapping("/download/{fileId}")
     public Result download(@PathVariable("fileId") long fileId) {
         String key = fileService.getById(fileId).getFilepath();
         OSSObject object = ossManger.getObject(key);
@@ -48,7 +48,7 @@ public class FileController {
         return Result.ok(object);
     }
 
-    @GetMapping("download/{path}/{fileId}")
+    @GetMapping("/download/{path}/{fileId}")
     public Result download(@PathVariable("fileId") long fileId,
                            @PathVariable("path") String path) {
         String key = fileService.getById(fileId).getFilepath();
@@ -56,7 +56,7 @@ public class FileController {
         return Result.ok(object);
     }
 
-    @GetMapping("upload")
+    @GetMapping("/upload")
     public Result upload(@RequestPart("file") MultipartFile multipartFile,
                          String uploadValue) {
         if (FileUploadEnum.getEnumByValue(uploadValue) == null) {

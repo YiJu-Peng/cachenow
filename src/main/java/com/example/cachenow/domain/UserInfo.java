@@ -1,7 +1,9 @@
 package com.example.cachenow.domain;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+
 import java.time.LocalDate;
+
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -11,19 +13,19 @@ import java.io.Serializable;
 
 /**
  * <p>
- *  这张表里面是有粉丝数,关注人的数量的,方便后续调整
+ * 这张表里面是有粉丝数,关注人的数量的,方便后续调整
  * </p>
  *
  * @author Ctrlcv工程师
  * @since 2023-11-02
- */@TableName("UserInfo")
+ */
+@TableName("UserInfo")
 public class UserInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
     /**
      * 主键，用户id
      */
-
     @TableId(value = "user_id", type = IdType.AUTO)
     private Long user_id;
 
@@ -76,7 +78,6 @@ public class UserInfo implements Serializable {
      * 更新时间
      */
     private LocalDateTime update_time;
-
 
 
     public Long getUser_id() {
@@ -170,17 +171,17 @@ public class UserInfo implements Serializable {
     @Override
     public String toString() {
         return "UserInfo{" +
-        "user_id=" + user_id +
-        ", city=" + city +
-        ", introduce=" + introduce +
-        ", fans=" + fans +
-        ", followee=" + followee +
-        ", gender=" + gender +
-        ", birthday=" + birthday +
-        ", credits=" + credits +
-        ", level=" + level +
-        ", create_time=" + create_time +
-        ", update_time=" + update_time +
-        "}";
+                "user_id=" + user_id +
+                ", city=" + city +
+                ", introduce=" + introduce +
+                ", fans=" + fans +
+                ", followee=" + followee +
+                ", gender=" + gender +
+                ", birthday=" + birthday +
+                ", credits=" + credits +
+                ", level=" + level +
+                ", create_time=" + create_time +
+                ", update_time=" + update_time +
+                "}";
     }
 }

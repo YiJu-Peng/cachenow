@@ -1,7 +1,6 @@
 package com.example.cachenow.controller;
 
 import com.example.cachenow.dto.Result;
-import com.example.cachenow.dto.Result;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.web.bind.annotation.GetMapping;
