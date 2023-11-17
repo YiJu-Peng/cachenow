@@ -8,6 +8,8 @@ import com.example.cachenow.service.impl.ResourceServiceImpl;
 
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +27,7 @@ import static com.example.cachenow.utils.Constants.UserConstants.PAGE_SIZE;
 
 @Service
 public class ResourceService {
+
     @Autowired
     private ResourceRepository resourceRepository;
 
@@ -63,6 +66,7 @@ public class ResourceService {
         NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
                 .withQuery(queryBuilder)
                 .withPageable(pageable)
+                .withSort(SortBuilders.fieldSort("rate").order(SortOrder.DESC)) // 根据评分字段降序排序
                 .build();
 
         // 执行分页搜索操作
@@ -81,6 +85,10 @@ public class ResourceService {
             return resourceService.ResourcesSearch(search,pageNum);
             // 没有找到匹配的结果,进入mysql数据库进行匹配(匹配只是很简单地匹配,就是将search前后加%)
         }
+    }
+    private float calculateOverallRating(int clickCount, float rating) {
+        // 根据自己的需求编写计算逻辑，例如可以简单地相加或者加权平均等
+        return clickCount + rating;
     }
 
 }

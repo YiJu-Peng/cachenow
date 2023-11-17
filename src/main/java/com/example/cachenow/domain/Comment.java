@@ -2,6 +2,7 @@ package com.example.cachenow.domain;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.mysql.cj.protocol.x.FieldFactory;
+import lombok.Data;
 import org.springframework.data.elasticsearch.annotations.Field;
 
 import java.io.Serializable;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
  * @author Ctrlcv工程师
  * @since 2023-10-31
  */@TableName("Comment")
+@Data
 public class Comment implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -28,6 +30,8 @@ public class Comment implements Serializable {
     private String comment;
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime created_at;
+
+    private Integer super_id;
 
 
     public Integer getComment_id() {

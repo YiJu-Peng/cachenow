@@ -10,10 +10,12 @@ import com.example.cachenow.domain.History;
 import com.example.cachenow.domain.User;
 import com.example.cachenow.domain.UserInfo;
 import com.example.cachenow.dto.LoginFormDTO;
+import com.example.cachenow.dto.ResourceDTO;
 import com.example.cachenow.dto.Result;
 import com.example.cachenow.dto.UserDTO;
 import com.example.cachenow.mapper.UserDao;
 import com.example.cachenow.service.IUserService;
+import com.example.cachenow.utils.other.MailUtils;
 import com.example.cachenow.utils.other.RedisUtil;
 import com.example.cachenow.utils.other.RegexUtils;
 import com.example.cachenow.utils.other.UserHolder;
@@ -32,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static com.example.cachenow.utils.Constants.RedisConstants.*;
 import static com.example.cachenow.utils.Constants.SystemConstants.USER_NICK_NAME_PREFIX;
@@ -60,9 +63,9 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements IUser
     private ResourceServiceImpl resourceService;
 
     @Override
-    public Result sendCode(String phone, HttpSession session) {
+    public Result sendCode(String mail) {
         // 1.校验手机号
-        if (RegexUtils.isPhoneInvalid(phone)) {
+        if (RegexUtils.isEmailInvalid(mail)) {
             // 2.如果不符合，返回错误信息
             return Result.fail("手机号格式错误！");
         }
@@ -70,14 +73,20 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements IUser
         //todo: 这个地方要使用外部的sdk获取验证码,还未完成
         String code = RandomUtil.randomNumbers(6);
 
-        // 4.保存验证码到 session
-        stringRedisTemplate.opsForValue().set(LOGIN_CODE_KEY + phone, code, LOGIN_CODE_TTL, TimeUnit.MINUTES);
+
+        // 4.保存验证码到 redis
+        stringRedisTemplate.opsForValue().set(LOGIN_CODE_KEY + mail, code, LOGIN_CODE_TTL, TimeUnit.MINUTES);
 
         // 5.发送验证码
         //todo: 这个地方我们还需要发送到手机上,现在只是简单的打印下
-        log.debug("发送短信验证码成功，验证码：{}", code);
+        log.debug("发送邮件验证码成功，验证码：{}", code);
+        try {
+            MailUtils.sendMail(mail, Integer.parseInt(code));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         // 返回ok
-        return Result.ok();
+        return Result.ok(code);
     }
 
     @Override
@@ -201,11 +210,12 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements IUser
 
     /**
      * 获取指定的页数
-     * @param pageNumber
-     * @return list of resources
+     *
+     * @param pageNumber 页数
+     * @return list of resourcesDto 这个返回的只是简单的信息
      */
     @Override
-    public List<com.example.cachenow.domain.Resource> userHistory(Long pageNumber) {
+    public List<ResourceDTO> userHistory(Long pageNumber) {
         final Long id = UserHolder.getUser().getId();
         final Page<History> userHistory =
                 historyService.getUserHistory(id, pageNumber, PAGE_SIZE);
@@ -214,7 +224,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements IUser
             // 处理每条历史记录的逻辑
             resources.add(resourceService.getById(history.getResource_id()));
         }
-        return resources;
+        return resources.stream().map(ResourceDTO::new).collect(Collectors.toList());
     }
 
     /**
@@ -223,7 +233,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements IUser
      * @return 历史记录
      */
     @Override
-    public List<com.example.cachenow.domain.Resource> userHistoryClean() {
+    public List<ResourceDTO> userHistoryClean() {
         final Long id = UserHolder.getUser().getId();
         RedisUtil.set(USER_HISTORY_KEY + id,0,USER_HISTROY_TTL);
         final Page<History> userHistory = historyService.
@@ -233,7 +243,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements IUser
             // 处理每条历史记录的逻辑
             resources.add(resourceService.getById(history.getResource_id()));
         }
-        return resources;
+        return resources.stream().map(ResourceDTO::new).collect(Collectors.toList());
     }
 
     /**

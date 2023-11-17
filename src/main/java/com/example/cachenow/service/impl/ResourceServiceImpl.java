@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.cachenow.domain.Comment;
 import com.example.cachenow.domain.Resource;
 import com.example.cachenow.dto.ResourceDTO;
-import com.example.cachenow.mapper.CategoryDao;
 import com.example.cachenow.mapper.ResourceDao;
 import com.example.cachenow.service.IResourceService;
 import com.example.cachenow.utils.other.UserHolder;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,10 +47,11 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceDao, Resource> impl
     }
 
     @Override
-    public List<Resource> getResourcesByUserId(Integer userId) {
+    public List<ResourceDTO> getResourcesByUserId(Integer userId) {
         return resourceMapper.
                 selectList(new QueryWrapper<Resource>().
-                        eq("uploader_id", userId));
+                        eq("uploader_id", userId))
+                .stream().map(ResourceDTO::new).collect(Collectors.toList());
     }
 
     @Override
@@ -79,12 +78,15 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceDao, Resource> impl
     }
 
     @Override
-    public void addComment(Long resourceId, String content) {
+    public void addComment(Long resourceId, String content, Long superId) {
         final Comment comment = new Comment();
         comment.setComment(content);
         comment.setResource_id(Math.toIntExact(resourceId));
         comment.setUser_id(Math.toIntExact(UserHolder.getUser().getId()));
         comment.setCreated_at(java.time.LocalDateTime.now());
+        if (superId != null) {
+            comment.setSuper_id(Math.toIntExact(superId));
+        }
         commentService.save(comment);
     }
 
@@ -95,6 +97,19 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceDao, Resource> impl
         if (i == 0) {
             throw new RuntimeException("删除失败,未找到相关资源");
         }
+    }
+
+    @Override
+    public Resource getResourceById(Integer resourceId) {
+        final Resource resource = resourceMapper.selectById(resourceId);
+        if (resource != null) {
+            //我们要让这个被点击一次
+            //resource.setClick_count(resource.getClick_count()+1);
+            //resourceMapper.updateById(resource);
+            return resource;
+        }
+        System.out.println("未找到资源");
+        return null;
     }
 
     /**
@@ -120,11 +135,12 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceDao, Resource> impl
     }
 
     // 按分类检索资源
-    public List<Resource> getResourcesByCategory(Integer categoryId, int pageNumber) {
+    public List<ResourceDTO> getResourcesByCategory(Integer categoryId, int pageNumber) {
         final Page<Resource> Page = new Page<>(pageNumber, PAGE_SIZE);
         return resourceMapper
                 .selectPage(Page, new QueryWrapper<Resource>()
-                .eq("category_id", categoryId)).getRecords();
+                .eq("category_id", categoryId)).getRecords()
+                .stream().map(ResourceDTO::new).collect(Collectors.toList());
     }
 
 

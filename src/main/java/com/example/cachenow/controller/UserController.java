@@ -4,12 +4,11 @@ package com.example.cachenow.controller;
 import cn.hutool.core.bean.BeanUtil;
 import com.example.cachenow.domain.User;
 import com.example.cachenow.domain.UserInfo;
-import com.example.cachenow.dto.LoginFormDTO;
-import com.example.cachenow.dto.Result;
-import com.example.cachenow.dto.UserDTO;
+import com.example.cachenow.dto.*;
 import com.example.cachenow.service.IUserInfoService;
 import com.example.cachenow.service.IUserService;
 import com.example.cachenow.utils.other.UserHolder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,24 +24,25 @@ import java.util.List;
  * @author Ctrlcv工程师
  * @since 2023-10-31
  */
-@Controller
 @RequestMapping("/user")
+@RestController
 public class UserController {
-    @Resource
+    @Autowired
     private IUserService userService;
 
-    @Resource
+    @Autowired
     private IUserInfoService userInfoService;
 
     /**
-     * 发送手机验证码
+     * 发送邮箱验证码
+     * @param mail 邮箱
      */
-    @PostMapping("code")
-    public Result sendCode(@RequestParam("phone") String phone, HttpSession session) {
+    @PostMapping("/code")
+    public Result sendCode(@RequestBody Mail mail) {
         // 发送短信验证码并保存验证码
-        return userService.sendCode(phone, session);
+        final String mail1 = mail.getMail();
+        return userService.sendCode(mail1);
     }
-
     /**
      * 登录功能
      * @param loginForm 登录参数，包含手机号、验证码；或者手机号、密码
@@ -84,6 +84,11 @@ public class UserController {
         return Result.ok(user);
     }
 
+    /**
+     * 返回用户的详细信息 这个包括住址个人信息啥的
+     * @param userId 用户id
+     * @return UserInfo
+     */
     @GetMapping("/info/{id}")
     public Result info(@PathVariable("id") Long userId){
         // 查询详情
@@ -98,6 +103,11 @@ public class UserController {
         return Result.ok(info);
     }
 
+    /**
+     * 通过id来对用户进行查询
+     * @param userId 用户id
+     * @return 返回用户的基本信息
+     */
     @GetMapping("/{id}")
     public Result queryUserById(@PathVariable("id") Long userId){
         // 查询详情
@@ -152,10 +162,15 @@ public class UserController {
         return Result.ok(resources, (long) size);
     }
 
+    /**
+     * resource消息
+     * @param pageNumber 页数
+     * @return 返回的是简单的resource消息
+     */
     @GetMapping("/history/{pageNumber}")
     public Result userHistoryClean(@PathVariable("pageNumber") Long pageNumber){
 
-        final List<com.example.cachenow.domain.Resource> resources = userService.userHistory(pageNumber);
+        final List<ResourceDTO> resources = userService.userHistory(pageNumber);
         final int size = resources.size();
         return Result.ok(resources, (long) size);
     }
