@@ -64,10 +64,10 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements IUser
 
     @Override
     public Result sendCode(String mail) {
-        // 1.校验手机号
+        // 1.校验邮箱号
         if (RegexUtils.isEmailInvalid(mail)) {
             // 2.如果不符合，返回错误信息
-            return Result.fail("手机号格式错误！");
+            return Result.fail("邮箱号格式错误！");
         }
         // 3.符合，生成验证码
         //todo: 这个地方要使用外部的sdk获取验证码,还未完成
@@ -78,7 +78,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements IUser
         stringRedisTemplate.opsForValue().set(LOGIN_CODE_KEY + mail, code, LOGIN_CODE_TTL, TimeUnit.MINUTES);
 
         // 5.发送验证码
-        //todo: 这个地方我们还需要发送到手机上,现在只是简单的打印下
+        //todo: 这个地方我们还需要发送到邮箱上,现在只是简单的打印下
         log.debug("发送邮件验证码成功，验证码：{}", code);
         try {
             MailUtils.sendMail(mail, Integer.parseInt(code));
@@ -91,18 +91,18 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements IUser
 
     @Override
     public Result login(LoginFormDTO loginForm, HttpSession session) {
-        // 1.校验手机号
-        String phone = loginForm.getPhone();
-        if (RegexUtils.isPhoneInvalid(phone)) {
+        // 1.校验邮箱号
+        String mail = loginForm.getMail();
+        if (RegexUtils.isEmailInvalid(mail)) {
             // 2.如果不符合，返回错误信息
-            return Result.fail("手机号格式错误！");
+            return Result.fail("邮箱号格式错误！");
         }
 
-        // 4.一致，根据手机号查询用户 select * from tb_user where phone = ?
-        User user = query().eq("phone", phone).one();
+        // 4.一致，根据邮箱号查询用户 select * from tb_user where mail = ?
+        User user = query().eq("email", mail).one();
 
         if(user.getPassword().equals(loginForm.getPassword())
-                &&user.getPhone().equals(loginForm.getPhone())){
+                &&user.getEmail().equals(loginForm.getMail())){
             // 7.保存用户信息到 redis中
             // 7.1.随机生成token，作为登录令牌
             String token = UUID.randomUUID().toString(true);
@@ -130,30 +130,30 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements IUser
 
     public  Result register(LoginFormDTO loginForm, HttpSession session){
 
-        // 1.校验手机号
-        String phone = loginForm.getPhone();
-        if (RegexUtils.isPhoneInvalid(phone)) {
+        // 1.校验邮箱
+        String mail = loginForm.getMail();
+        if (RegexUtils.isEmailInvalid(mail)) {
             // 2.如果不符合，返回错误信息
-            return Result.fail("手机号格式错误！");
+            return Result.fail("邮箱号格式错误！");
         }
 
 
 
         // 3.从redis获取验证码并校验
-        String cacheCode = stringRedisTemplate.opsForValue().get(LOGIN_CODE_KEY + phone);
+        String cacheCode = stringRedisTemplate.opsForValue().get(LOGIN_CODE_KEY + mail);
         String code = loginForm.getCode();
         if (cacheCode == null || !cacheCode.equals(code)) {
             // 不一致，报错
             return Result.fail("验证码错误");
         }
 
-        // 4.一致，根据手机号查询用户 select * from tb_user where phone = ?
-        User user = query().eq("phone", phone).one();
+        // 4.一致，根据邮箱号查询用户 select * from tb_user where mail = ?
+        User user = query().eq("email", mail).one();
 
         // 5.判断用户是否存在
         if (user == null) {
             // 6.不存在，创建新用户并保存
-            user = createUserWithPhone(phone);
+            user = createUserWithMail(mail);
         }
 
         // 7.保存用户信息到 redis中
@@ -314,10 +314,10 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements IUser
 
 
 
-    private User createUserWithPhone(String phone) {
+    private User createUserWithMail(String mail) {
         // 1.创建用户
         User user = new User();
-        user.setPhone(phone);
+        user.setEmail(mail);
         user.setUsername(USER_NICK_NAME_PREFIX + RandomUtil.randomString(10));
         // 2.保存用户
         save(user);

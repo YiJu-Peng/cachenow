@@ -6,9 +6,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.cachenow.domain.History;
 import com.example.cachenow.mapper.HistoryDao;
 import com.example.cachenow.service.IHistoryService;
+import com.example.cachenow.utils.other.UserHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -31,6 +34,15 @@ public class HistoryServiceImpl extends ServiceImpl<HistoryDao, History> impleme
 
         Page<History> page = new Page<>(pageNo, pageSize);
         return historyDao.selectPage(page, queryWrapper);
+    }
+
+    @Override
+    public void read(int resourceId) {
+        final History history = new History();
+        history.setAccess_time(LocalDateTime.now());
+        history.setUser_id(Math.toIntExact(UserHolder.getUser().getId()));
+        history.setResource_id(resourceId);
+        historyDao.insert(history);
     }
 
 

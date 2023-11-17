@@ -1,7 +1,11 @@
 package com.example.cachenow.controller;
 
 
+import com.example.cachenow.dto.Result;
+import com.example.cachenow.service.impl.HistoryServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/history")
 public class HistoryController {
+
 
 }
 

@@ -26,7 +26,6 @@ import javax.mail.internet.MimeMessage;
 import com.sun.mail.util.MailSSLSocketFactory;
 
 
-
 /*
  * 邮件发送工具类
  *
@@ -90,9 +89,9 @@ public class MailUtils {
  
             Message message = new MimeMessage(session);
  
-            //2.1设置发件人：
+            //2.1设置发件人,以及发件人的别名：
  
-            message.setFrom(new InternetAddress("2211087760@qq.com"));
+            message.setFrom(new InternetAddress("2211087760@qq.com","文创"));
  
             //2.2设置收件人 这个TO就是收件人
  

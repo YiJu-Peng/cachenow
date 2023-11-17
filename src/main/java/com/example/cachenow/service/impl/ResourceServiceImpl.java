@@ -39,6 +39,9 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceDao, Resource> impl
     @Autowired
     private CommentServiceImpl commentService;
 
+    @Autowired
+    private HistoryServiceImpl historyService;
+
     // 添加资源,异步双写
     @Transactional
     public void addResource(Resource resource) {
@@ -106,6 +109,7 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceDao, Resource> impl
             //我们要让这个被点击一次
             //resource.setClick_count(resource.getClick_count()+1);
             //resourceMapper.updateById(resource);
+            historyService.read(Math.toIntExact(resource.getResource_id()));
             return resource;
         }
         System.out.println("未找到资源");

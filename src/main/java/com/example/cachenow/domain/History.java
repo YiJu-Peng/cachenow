@@ -19,7 +19,7 @@ public class History implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "history_id", type = IdType.ASSIGN_ID)
+    @TableId(value = "history_id", type = IdType.AUTO)
     private Integer history_id;
 
     private Integer user_id;
