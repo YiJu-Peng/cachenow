@@ -8,16 +8,21 @@ import com.example.cachenow.dto.Result;
 import com.example.cachenow.dto.Search;
 import com.example.cachenow.es.esservice.ResourceService;
 import com.example.cachenow.service.impl.ResourceServiceImpl;
+import com.example.cachenow.utils.annotation.SensitiveWordFilter;
 import com.example.cachenow.utils.other.UserHolder;
+
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
- * 前端控制器
+ *  前端控制器
  * </p>
  *
  * @author Ctrlcv工程师
@@ -55,15 +60,10 @@ public class ResourceController {
      * @param search 要查的关键字,可以是标题和内容
      * @return 返回匹配资源列表
      */
-    // TODO: 将其包装成带有热度的资源列表
     @PostMapping("/search")
     public Result getResource(@RequestBody Search search) {
         final List<ResourceDTO> resourcesByTitle =
                 resourceESService.searchByTitleAndContent(search.getSearch().toString(), search.getPageNumber());
-        // es 中是否支持按字段排序
-        resourcesByTitle.stream().forEach((resourceDTO -> {
-
-        }));
         final int size = resourcesByTitle.size();
         return Result.ok(resourcesByTitle, (long) size);
     }
@@ -73,12 +73,11 @@ public class ResourceController {
      * 按分类检索资源
      *
      * @param search 分类进行检索的分类id
-     * @return 返回符合分类的资源
+     * @return 返回符合分类的资源 这个返回的只有简单的信息
      */
-    // TODO: 将其包装成带有热度的资源列表
     @PostMapping("/category/")
     public Result getResourcesByCategory(@RequestBody Search search) {
-        final List<Resource> resourcesByCategory = resourceService.
+        final List<ResourceDTO> resourcesByCategory = resourceService.
                 getResourcesByCategory((Integer) search.getSearch(), search.getPageNumber());
         final Long size = (long) resourcesByCategory.size();
         return Result.ok(resourcesByCategory, size);
@@ -92,7 +91,7 @@ public class ResourceController {
      */
     @GetMapping("/{userId}")
     public Result getCategoryById(@PathVariable Integer userId) {
-        final List<Resource> resourcesByUserId = resourceService.getResourcesByUserId(userId);
+        final List<ResourceDTO> resourcesByUserId = resourceService.getResourcesByUserId(userId);
         return Result.ok(resourcesByUserId, (long) resourcesByUserId.size());
     }
 
@@ -124,20 +123,13 @@ public class ResourceController {
         return Result.ok("资源评分成功");
     }
 
-    @PostMapping("/comment/{resourceId}")
-    public Result commentResource(
-            @PathVariable("resourceId") Long resourceId,
-            @RequestBody String content) {
-        if (resourceId == null) {
-            return Result.fail("resourceId cannot be null");
-        }
-        if (content == null) {
-            return Result.fail("content cannot be null");
-        }
-        resourceService.addComment(resourceId, content);
-        return Result.ok("评论成功");
-    }
 
+    /**
+     * 对指定id的资源进行删除
+     *
+     * @param resourceId 资源的id
+     * @return 返回是否删除成功
+     */
     @DeleteMapping("/delete/{resourceId}")
     public Result commentResource(@PathVariable Integer resourceId) {
         if (resourceId == null) {
@@ -145,6 +137,17 @@ public class ResourceController {
         }
         resourceService.deleteResource(resourceId);
         return Result.ok("资源删除成功");
+    }
+
+    /**
+     * 根据id进行一个resource的查询
+     * @param resourceId id
+     * @return 返回resource的具体内容
+     */
+    @GetMapping("/get/{resourceId}")
+    public Result getResourceById(@PathVariable Integer resourceId) {
+        Resource resource = resourceService.getResourceById(resourceId);
+        return Result.ok(resource);
     }
 }
 

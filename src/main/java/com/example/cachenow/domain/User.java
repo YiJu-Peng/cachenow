@@ -37,8 +37,6 @@ public class User implements Serializable {
 
     private String icon;
 
-    private String role;
-
     private String email;
     private String phone;
 
