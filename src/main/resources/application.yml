@@ -32,8 +32,6 @@ spring:
         min-idle: 1
         time-between-eviction-runs: 10s
 
-
-
   application:
     name: cacheservice
 
@@ -43,6 +41,9 @@ spring:
     username: root
     password: asdf
     virtual-host: "/"
+    listener:
+      direct:
+        acknowledge-mode: manual # 改为手动确认
 
   cloud:
     nacos:
