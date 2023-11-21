@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -67,14 +68,14 @@ public class UserController {
      * @return 无
      */
     @PostMapping("/logout")
-    public Result logout(){
+    public Result logout(HttpServletRequest request){
         // TODO 实现登出功能
-        UserHolder.removeUser();
+        userService.logout(request);
         return Result.ok();
     }
 
     /**
-     * 返回自己的信息獲得
+     * 返回自己的信息
      * @return UserDTO
      */
     @GetMapping("/me")
