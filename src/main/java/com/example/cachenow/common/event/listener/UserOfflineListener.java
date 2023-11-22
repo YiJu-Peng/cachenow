@@ -1,22 +1,18 @@
 package com.example.cachenow.common.event.listener;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.cachenow.common.cache.UserCache;
 import com.example.cachenow.common.event.UserOfflineEvent;
 import com.example.cachenow.common.event.UserOnlineEvent;
-import com.example.cachenow.domain.GroupMember;
 import com.example.cachenow.domain.User;
 import com.example.cachenow.dto.UserDTO;
 import com.example.cachenow.mapper.GroupMemberDao;
 import com.example.cachenow.mapper.UserDao;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.core.*;
+import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * 用户下线监听器
