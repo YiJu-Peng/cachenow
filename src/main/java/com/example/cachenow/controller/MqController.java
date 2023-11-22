@@ -30,7 +30,7 @@ public class MqController {
     }
     
 
-    @RabbitListener(queues = QUEUENAME)
+    // @RabbitListener(queues = QUEUENAME)
     public void processA(String msg) {
         System.out.println("Receiver A:" + msg);
     }

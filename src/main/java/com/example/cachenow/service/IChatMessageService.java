@@ -3,6 +3,7 @@ package com.example.cachenow.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.cachenow.domain.ChatMessage;
+import com.example.cachenow.dto.ChatMessageDTO;
 
 /**
  * <p>
@@ -13,5 +14,5 @@ import com.example.cachenow.domain.ChatMessage;
  * @since 2023-10-31
  */
 public interface IChatMessageService extends IService<ChatMessage> {
-
+    Integer sendMsg(ChatMessageDTO request);
 }

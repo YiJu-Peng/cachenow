@@ -33,6 +33,8 @@ public class User implements Serializable {
 
     private String password;
 
+    private Integer active_status;
+
     private LocalDateTime created_at;
 
     private String icon;
@@ -88,16 +90,26 @@ public class User implements Serializable {
         this.email = email;
     }
 
+    public Integer getActive_status() {
+        return active_status;
+    }
+
+    public void setActive_status(Integer active_status) {
+        this.active_status = active_status;
+    }
+
     @Override
     public String toString() {
         return "User{" +
-        "user_id=" + user_id +
-        ", username=" + username +
-        ", password=" + password +
-        ", created_at=" + created_at +
-        ", icon=" + icon +
-        ", email=" + email +
-        "}";
+                "user_id=" + user_id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", active_status=" + active_status +
+                ", created_at=" + created_at +
+                ", icon='" + icon + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                '}';
     }
 
     public void setCreated_at(LocalDateTime created_at) {

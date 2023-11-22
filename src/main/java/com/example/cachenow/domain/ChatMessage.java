@@ -14,12 +14,14 @@ import java.time.LocalDateTime;
  *
  * @author Ctrlcv工程师
  * @since 2023-10-31
- */@TableName("ChatMessage")
+ */
+@TableName("ChatMessage")
 public class ChatMessage implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "message_id", type = IdType.ASSIGN_ID)
+    // change
+    @TableId(value = "message_id", type = IdType.AUTO)
     private Integer message_id;
 
     private Integer sender_id;

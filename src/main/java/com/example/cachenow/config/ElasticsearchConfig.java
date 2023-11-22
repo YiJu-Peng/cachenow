@@ -19,7 +19,7 @@ import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
  * 作者 Ctrlcv工程师  在线面对百度编程
  * 对于分布式搜索类的基本配置
  */
-@Configuration
+// @Configuration
 public class ElasticsearchConfig {
     @Value("${spring.elasticsearch.rest.uris}")
     private String elasticsearchUri;

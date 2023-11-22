@@ -7,9 +7,6 @@ import com.example.cachenow.dto.Result;
 import com.example.cachenow.service.impl.ChatMessageServiceImpl;
 import com.example.cachenow.utils.other.UserHolder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +31,12 @@ public class ChatMessageController {
     public ChatMessageController(ChatMessageServiceImpl chatMessageService) {
         this.chatMessageService = chatMessageService;
     }
+    @PostMapping("/msg")
+    public Result sendMsg(@RequestBody ChatMessageDTO request){
+        Integer msgId = chatMessageService.sendMsg(request);
+        // 一个用户向群组发送消息，带上发送者id和在线列表
+        return Result.ok(msgId);
+    }
 
     /**
      * 消息的存储
@@ -44,7 +47,7 @@ public class ChatMessageController {
     public Result createChatMessage(@RequestBody ChatMessageDTO chatMessageDTO) {
         ChatMessage chatMessage = new ChatMessage();
         chatMessage.setSender_id(Math.toIntExact(UserHolder.getUser().getId()));
-        chatMessage.setReceiver_id(chatMessageDTO.getReceiver_id());
+        chatMessage.setReceiver_id(chatMessageDTO.getRoomId());
         chatMessage.setMessage(chatMessageDTO.getMessage());
         chatMessage.setCreated_at(LocalDateTime.now());
         chatMessageService.save(chatMessage);

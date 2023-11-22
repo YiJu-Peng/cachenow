@@ -21,7 +21,6 @@ public class RedisConstants {
 
 
 
-
-
+    public static final String USER_OFFLINE_MSG = "user:offline:msg:";
 
 }

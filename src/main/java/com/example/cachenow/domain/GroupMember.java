@@ -1,19 +1,26 @@
 package com.example.cachenow.domain;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.ToString;
 
 import java.io.Serializable;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author Ctrlcv工程师
  * @since 2023-10-31
- */@TableName("GroupMember")
+ */
+@TableName("GroupMember")
+@Data
 public class GroupMember implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -21,8 +28,10 @@ public class GroupMember implements Serializable {
     @TableId(value = "member_id", type = IdType.ASSIGN_ID)
     private Integer member_id;
 
+    @TableField("group_id")
     private Integer group_id;
 
+    @TableField("user_id")
     private Integer user_id;
 
 
