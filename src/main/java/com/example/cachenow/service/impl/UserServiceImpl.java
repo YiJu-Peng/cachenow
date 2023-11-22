@@ -26,6 +26,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -244,6 +245,15 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements IUser
             resources.add(resourceService.getById(history.getResource_id()));
         }
         return resources.stream().map(ResourceDTO::new).collect(Collectors.toList());
+    }
+
+    @Override
+    public Result logout(HttpServletRequest request) {
+        final String token = request.getHeader("authorization");
+        final String tokenKey = LOGIN_USER_KEY + token;
+        final Boolean logout = stringRedisTemplate.delete(tokenKey);
+        UserHolder.removeUser();
+        return Result.ok(Boolean.TRUE.equals(logout));
     }
 
     /**

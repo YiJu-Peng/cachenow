@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.swagger2.mappers.ModelMapper;
@@ -46,5 +47,16 @@ public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new LongToLocalDateTimeConverter());
+    }
+
+    //跨域放行
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("*") // 允许跨域访问的源，可以使用通配符"*"表示允许所有源
+                .allowedMethods("GET", "POST", "PUT", "DELETE") // 允许跨域访问的HTTP方法
+                .allowedHeaders("Authorization", "Content-Type") // 允许跨域访问的请求头
+                .allowCredentials(true) // 是否允许发送认证信息（如Cookie）
+                .maxAge(3600); // 预检请求的有效期，单位为秒
     }
 }

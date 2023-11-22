@@ -8,6 +8,7 @@ import com.example.cachenow.dto.LoginFormDTO;
 import com.example.cachenow.dto.ResourceDTO;
 import com.example.cachenow.dto.Result;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -38,4 +39,5 @@ public interface IUserService extends IService<User> {
     List<ResourceDTO> userHistoryClean();
 
 
+    Result logout(HttpServletRequest request);
 }
