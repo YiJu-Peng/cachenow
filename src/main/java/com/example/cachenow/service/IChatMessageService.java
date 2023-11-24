@@ -14,5 +14,5 @@ import com.example.cachenow.dto.ChatMessageDTO;
  * @since 2023-10-31
  */
 public interface IChatMessageService extends IService<ChatMessage> {
-    Integer sendMsg(ChatMessageDTO request);
+    Integer sendMsg(Integer rid,String msg);
 }

@@ -52,22 +52,20 @@ public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageDao, ChatMess
     private GroupMemberDao groupMemberDao;
     @Autowired
     private UserDao userDao;
-    @Autowired
-    private ThreadPoolTaskExecutor executor;
 
     @Override
-    public Integer sendMsg(ChatMessageDTO request) {
+    public Integer sendMsg(Integer rid,String msg) {
         ChatMessage message = new ChatMessage();
         message.setSender_id(Math.toIntExact(UserHolder.getUser().getId()));
-        message.setMessage(request.getMessage());
-        message.setReceiver_id(request.getRoomId());
+        message.setMessage(msg);
+        message.setReceiver_id(rid);
         chatMessageDao.insert(message);
         Integer msgId = message.getMessage_id();
 
         // 查询房间中的所有用户
         List<Integer> uIds = new ArrayList<>();
         QueryWrapper<GroupMember> groupMemberQueryWrapper = new QueryWrapper<GroupMember>().
-                eq("group_id", request.getRoomId()).
+                eq("group_id", rid).
                 select("user_id");
         groupMemberDao.
                 selectList(groupMemberQueryWrapper).
@@ -92,18 +90,14 @@ public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageDao, ChatMess
 
         // 在线用户实时推送，离线用户离线存储
         ChatMessageDTO dto = new ChatMessageDTO();
-        dto.setMessage(request.getMessage());
-        dto.setRoomId(request.getRoomId());
+        dto.setMessage(msg);
+        dto.setRoomId(rid);
         dto.setUidList(activeUidList);
         msgRouting(dto);
 
         dto.setUidList(inactiveUidList);
         store(dto);
 
-        executor.execute(() -> {
-            System.out.println("throw a e.");
-            throw new BizException(ErrorCode.SYSTEM_ERROR,"1234");
-        });
         return msgId;
     }
 
