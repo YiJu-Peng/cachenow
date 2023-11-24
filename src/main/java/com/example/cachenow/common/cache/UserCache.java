@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 用户缓存相关
@@ -31,12 +32,15 @@ public class UserCache {
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<User>().
                 select("user_id", "active_status");
         List<User> userList = userDao.selectList(userQueryWrapper);
-        userList.stream().
-                filter(user -> user.getActive_status() == 1).// 1表示在线状态
-                forEach(activeUser -> ACTIVE_USER_SET.add(activeUser.getUser_id()));
-        userList.stream().
-                filter(user -> user.getActive_status() == 2).// 2表示离线状态
-                forEach(inactiveUser -> INACTIVE_USER_SET.add(inactiveUser.getUser_id()));
+        userList.forEach(user -> {
+            // 如果active_status字段为空，则自动赋值为2
+                    int activeStatus = Optional.ofNullable(user.getActive_status()).orElse(2);
+                    if (activeStatus == 1) {
+                        ACTIVE_USER_SET.add(user.getUser_id());
+                    } else if (activeStatus == 2) {
+                        INACTIVE_USER_SET.add(user.getUser_id());
+                    }
+                });
     }
 
     public boolean online(Integer uid) {
