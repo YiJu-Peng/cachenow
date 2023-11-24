@@ -7,10 +7,7 @@ import com.example.cachenow.dto.Result;
 import com.example.cachenow.service.impl.ChatMessageServiceImpl;
 import com.example.cachenow.utils.other.UserHolder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
@@ -31,9 +28,10 @@ public class ChatMessageController {
     public ChatMessageController(ChatMessageServiceImpl chatMessageService) {
         this.chatMessageService = chatMessageService;
     }
-    @PostMapping("/msg")
-    public Result sendMsg(@RequestBody ChatMessageDTO request){
-        Integer msgId = chatMessageService.sendMsg(request);
+    @PostMapping("/send/{rid}/{msg}")
+    public Result sendMsg(@PathVariable("rid")Integer rid,
+                          @PathVariable("msg")String msg){
+        Integer msgId = chatMessageService.sendMsg(rid,msg);
         // 一个用户向群组发送消息，带上发送者id和在线列表
         return Result.ok(msgId);
     }
