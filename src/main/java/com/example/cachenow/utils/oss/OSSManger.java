@@ -25,10 +25,10 @@ public class OSSManger {
     @PostConstruct
     void init() {
         // 创建OSS实例
-        endpoint = "oss-cn-hangzhou.aliyuncs.com";
-        accessKeyId = "LTAI5t7nbGvEKaecdg8mZZuh";
-        accessKeySecret = "7OeWcShYptA6lHvpkXv99zGCoeOMJk";
-        bucketName = "alef-edu";
+        endpoint = "";
+        accessKeyId = "";
+        accessKeySecret = "";
+        bucketName = "";
         OSS_HOST = "https://" + bucketName + "." + endpoint;
         ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
     }
